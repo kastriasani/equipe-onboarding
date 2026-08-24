@@ -1,0 +1,1166 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Onboarding · equipe</title>
+<link rel="icon" href="https://cdn.prod.website-files.com/6793c2e16c2869d86cf71602/67a23b10af6bf88f32fba68f_favicon-equipe.png">
+<style>
+/* ---------- equipe brand fonts (Webflow CDN) ---------- */
+@font-face{font-family:Gilroy;src:url(https://cdn.prod.website-files.com/6793c2e16c2869d86cf71602/679773c4e73d68e57af9ad8d_Gilroy-Regular.otf);font-weight:400;font-display:swap}
+@font-face{font-family:Gilroy;src:url(https://cdn.prod.website-files.com/6793c2e16c2869d86cf71602/679773c4de8363e09bf76fda_Gilroy-Medium.otf);font-weight:500;font-display:swap}
+@font-face{font-family:Gilroy;src:url(https://cdn.prod.website-files.com/6793c2e16c2869d86cf71602/679773c4b4955cd18a7a9ef9_Gilroy-Semibold.otf);font-weight:600;font-display:swap}
+@font-face{font-family:Gilroy;src:url(https://cdn.prod.website-files.com/6793c2e16c2869d86cf71602/679773c4c08f594237364112_Gilroy-Bold.otf);font-weight:700;font-display:swap}
+@font-face{font-family:Jetbrainsmono;src:url(https://cdn.prod.website-files.com/6793c2e16c2869d86cf71602/679d19c7bc54648fd603750f_JetBrainsMono-Medium.ttf);font-weight:500;font-display:swap}
+
+/* ---------- tokens (extrahiert aus equipe.one) ---------- */
+:root{
+  --bg:#121212; --bg-2:#171817; --bg-3:#1c1d1c;
+  --card:rgba(217,217,217,.03); --card-h:rgba(217,217,217,.055);
+  --line:rgba(255,255,255,.10); --line-2:rgba(255,255,255,.16);
+  --ink:#fff; --ink-85:rgba(255,255,255,.85); --ink-65:rgba(255,255,255,.65);
+  --ink-45:rgba(255,255,255,.45); --ink-30:rgba(255,255,255,.30);
+  --green:#199e8a; --green-h:#15917e; --green-12:rgba(25,158,138,.12); --green-24:rgba(25,158,138,.24);
+  --red:#d62b1f; --red-12:rgba(229,84,106,.12);
+  --r-8:8px; --r-12:12px; --r-16:16px; --r-24:24px; --pill:100px;
+  --maxw:760px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:96px}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:Gilroy,"Helvetica Neue",Arial,sans-serif;font-weight:400;
+  font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(900px 520px at 78% -8%, rgba(25,158,138,.16), transparent 62%),
+    radial-gradient(700px 420px at 6% 4%, rgba(25,158,138,.07), transparent 60%);
+}
+.wrap{position:relative;z-index:1;max-width:var(--maxw);margin:0 auto;padding:0 24px}
+.mono{font-family:Jetbrainsmono,ui-monospace,monospace;font-weight:500;letter-spacing:.06em;text-transform:uppercase;font-size:11px}
+h1,h2,h3{font-weight:600;letter-spacing:-.022em;margin:0;line-height:1.06}
+h1{font-size:clamp(32px,6.4vw,52px)}
+h2{font-size:clamp(23px,3.4vw,30px);letter-spacing:-.02em;line-height:1.14}
+h3{font-size:17px;letter-spacing:-.01em}
+p{margin:0}
+a{color:var(--green);text-decoration:none}
+a:hover{color:var(--ink)}
+
+/* ---------- header ---------- */
+header{
+  position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);
+  background:rgba(18,18,18,.82);border-bottom:1px solid var(--line);
+}
+.hbar{max-width:var(--maxw);margin:0 auto;padding:14px 24px;display:flex;align-items:center;gap:16px}
+.logo{width:78px;flex:none;display:block}
+.logo svg{display:block;width:100%;height:auto}
+.hspacer{flex:1}
+.hstatus{color:var(--ink-45);display:flex;align-items:center;gap:8px;white-space:nowrap}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex:none}
+.dot.idle{background:var(--ink-30)}
+.prog{position:absolute;left:0;bottom:-1px;height:2px;width:0;will-change:width;
+  background:linear-gradient(90deg,rgba(25,158,138,0) 0%,rgba(25,158,138,.45) 55%,rgba(25,158,138,.95) 100%);}
+.prog::after{content:"";position:absolute;right:0;top:-1px;width:22px;height:4px;border-radius:4px;
+  background:radial-gradient(circle at right center,rgba(25,158,138,.55),transparent 70%)}
+@keyframes progGrow{from{width:0}to{width:100%}}
+@supports (animation-timeline: scroll()){
+  .prog{animation:progGrow linear both;animation-timeline:scroll(root block)}
+}
+
+/* ---------- hero ---------- */
+.hero{padding:64px 0 8px}
+.eyebrow{
+  display:inline-flex;align-items:center;gap:8px;border:1px solid var(--green);
+  background:var(--green-12);color:#fff;border-radius:var(--pill);padding:7px 14px 6px;
+}
+.eyebrow .dot{background:var(--green);box-shadow:0 0 10px 2px rgba(25,158,138,.7)}
+.hero h1{margin:22px 0 0}
+.hero h1 em{font-style:normal;color:var(--green)}
+.lede{margin-top:18px;color:var(--ink-65);font-size:17px;max-width:60ch}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.fact{
+  display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);
+  background:var(--card);border-radius:var(--pill);padding:8px 14px;color:var(--ink-65);
+  font-family:Jetbrainsmono,monospace;font-size:11px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;
+}
+.fact svg{width:13px;height:13px;flex:none;color:var(--green)}
+
+/* ---------- video ---------- */
+.video{margin:44px 0 0}
+.video-frame{
+  position:relative;border:1px solid var(--line);border-radius:var(--r-24);overflow:hidden;
+  background:linear-gradient(160deg,#191a19,#131413);aspect-ratio:16/9;
+}
+.video-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:24px}
+.vph .play{
+  width:62px;height:62px;border-radius:50%;background:var(--green);display:grid;place-items:center;
+  box-shadow:0 12px 40px rgba(25,158,138,.32);
+}
+.vph .play svg{width:20px;height:20px;margin-left:3px;color:#fff}
+.vph p{color:var(--ink-45);max-width:34ch;font-size:14px}
+.vcap{margin-top:14px;color:var(--ink-45);font-size:13px;display:flex;gap:10px;align-items:baseline}
+.vcap b{color:var(--ink-85);font-weight:500;flex:none}
+
+/* ---------- sections ---------- */
+.sec{padding:56px 0 0;scroll-margin-top:88px}
+.sec-head{display:flex;gap:14px;align-items:baseline;padding-bottom:6px}
+.sec-num{color:var(--green);flex:none;padding-top:4px}
+.sec-intro{color:var(--ink-45);font-size:14px;margin-top:10px;max-width:62ch}
+.rule{height:1px;background:var(--line);margin:22px 0 26px}
+
+/* ---------- fields ---------- */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.f{display:flex;flex-direction:column;gap:8px}
+.f.full{grid-column:1/-1}
+label{font-size:14px;font-weight:500;color:var(--ink-85);letter-spacing:-.005em}
+label .req{color:var(--green);margin-left:3px}
+.hint{font-size:12.5px;color:var(--ink-45);line-height:1.45}
+.hint.fromcontract{color:var(--green)}
+input,textarea,select{
+  width:100%;font:inherit;font-size:15px;color:var(--ink);
+  background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:var(--r-12);
+  padding:13px 14px;outline:none;transition:border-color .18s,background .18s,box-shadow .18s;
+}
+textarea{min-height:96px;resize:vertical;line-height:1.5}
+select{appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,.45)' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");
+  background-repeat:no-repeat;background-position:right 12px center;background-size:16px;padding-right:38px}
+input::placeholder,textarea::placeholder{color:var(--ink-30)}
+input:hover,textarea:hover,select:hover{border-color:var(--line-2)}
+input:focus,textarea:focus,select:focus{border-color:var(--green);background:rgba(255,255,255,.05);box-shadow:0 0 0 3px var(--green-12)}
+input.bad,textarea.bad,select.bad{border-color:var(--red)}
+option{background:#1c1d1c;color:#fff}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  border:1px solid var(--line);background:var(--card);color:var(--ink-65);
+  border-radius:var(--pill);padding:9px 15px;font-size:14px;cursor:pointer;user-select:none;
+  transition:.16s;
+}
+.chip:hover{border-color:var(--line-2);color:var(--ink)}
+.chip[aria-pressed="true"]{border-color:var(--green);background:var(--green-12);color:#fff}
+.chip[aria-pressed="true"]::before{content:"✓";color:var(--green);margin-right:7px;font-size:12px}
+
+/* callout */
+.note{
+  border:1px solid var(--line);background:var(--card);border-radius:var(--r-16);
+  padding:16px 18px;font-size:14px;color:var(--ink-65);display:flex;gap:12px;align-items:flex-start;
+}
+.note svg{width:16px;height:16px;flex:none;margin-top:3px;color:var(--green)}
+.note.warn{border-color:rgba(214,43,31,.35);background:var(--red-12)}
+.note.warn svg{color:var(--red)}
+.note b{color:var(--ink);font-weight:500}
+
+/* switch */
+.switch{display:flex;align-items:center;gap:14px;border:1px solid var(--line);background:var(--card);border-radius:var(--r-16);padding:16px 18px;cursor:pointer}
+.switch:hover{background:var(--card-h)}
+.track{width:44px;height:25px;border-radius:var(--pill);background:rgba(255,255,255,.12);position:relative;flex:none;transition:.2s}
+.knob{position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#fff;transition:.2s}
+.switch[aria-checked="true"] .track{background:var(--green)}
+.switch[aria-checked="true"] .knob{left:22px}
+.switch .txt{font-size:14.5px;color:var(--ink-85)}
+.switch .txt small{display:block;color:var(--ink-45);font-size:12.5px;margin-top:2px}
+.collapse{display:none;margin-top:22px}
+.collapse.open{display:block;animation:fade .3s ease}
+@keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+/* vault rows */
+.vrow{border:1px solid var(--line);background:var(--card);border-radius:var(--r-16);padding:16px;margin-bottom:12px}
+.vrow .grid{gap:12px}
+.vrow-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.vrow-top .mono{color:var(--ink-45)}
+.mini{background:none;border:1px solid var(--line);color:var(--ink-45);border-radius:var(--pill);padding:6px 12px;font:inherit;font-size:12.5px;cursor:pointer}
+.mini:hover{border-color:var(--line-2);color:var(--ink)}
+.mini.danger:hover{border-color:var(--red);color:var(--red)}
+
+/* dropzone */
+.drop{
+  border:1px dashed var(--line-2);border-radius:var(--r-16);padding:26px 20px;text-align:center;
+  cursor:pointer;transition:.18s;background:rgba(255,255,255,.015);
+}
+.drop:hover,.drop.over{border-color:var(--green);background:var(--green-12)}
+.drop .t{font-size:14.5px;color:var(--ink-85)}
+.drop .s{font-size:12.5px;color:var(--ink-45);margin-top:5px}
+.flist{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.flist li{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:var(--card);border-radius:var(--r-12);padding:10px 12px;font-size:13.5px}
+.flist .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.flist .sz{color:var(--ink-45);font-family:Jetbrainsmono,monospace;font-size:11.5px;flex:none}
+.flist .x{background:none;border:0;color:var(--ink-45);cursor:pointer;font-size:17px;line-height:1;padding:0 2px}
+.flist .x:hover{color:var(--red)}
+
+/* submit */
+.submit{padding:60px 0 96px}
+.cta{
+  display:inline-flex;align-items:center;gap:10px;background:var(--green);color:#fff;border:0;
+  border-radius:var(--pill);padding:17px 30px;font:inherit;font-weight:600;font-size:16px;cursor:pointer;transition:.18s;
+}
+.cta:hover{background:var(--green-h);transform:translateY(-1px)}
+.cta:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.cta svg{width:16px;height:16px}
+.consent{display:flex;gap:12px;align-items:flex-start;margin:0 0 24px;font-size:14px;color:var(--ink-65);cursor:pointer}
+.consent input{width:19px;height:19px;flex:none;margin-top:1px;accent-color:var(--green);cursor:pointer}
+.err{color:var(--red);font-size:13.5px;margin-top:14px;display:none}
+.err.show{display:block}
+
+footer{border-top:1px solid var(--line);padding:30px 0 46px;color:var(--ink-30);font-size:12.5px}
+.frow{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* overlay */
+.ov{position:fixed;inset:0;z-index:100;background:rgba(10,10,10,.88);backdrop-filter:blur(8px);display:none;place-items:center;padding:24px}
+.ov.show{display:grid}
+.ovbox{max-width:460px;width:100%;border:1px solid var(--line);background:var(--bg-2);border-radius:var(--r-24);padding:34px}
+.ovbox h3{font-size:22px;letter-spacing:-.02em}
+.ovbox p{color:var(--ink-65);font-size:14.5px;margin-top:12px}
+.steps{list-style:none;padding:0;margin:22px 0 0;display:flex;flex-direction:column;gap:10px;font-size:14px;color:var(--ink-45)}
+.steps li{display:flex;gap:11px;align-items:center}
+.steps .ic{width:18px;height:18px;border-radius:50%;border:1px solid var(--line-2);flex:none;display:grid;place-items:center;font-size:10px}
+.steps li.done{color:var(--ink-85)}
+.steps li.done .ic{background:var(--green);border-color:var(--green);color:#fff}
+.steps li.run .ic{border-color:var(--green);animation:pulse 1s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 4px var(--green-12)}}
+.tick{width:56px;height:56px;border-radius:50%;background:var(--green-12);border:1px solid var(--green);display:grid;place-items:center;margin-bottom:20px}
+.tick svg{width:24px;height:24px;color:var(--green)}
+
+@media (max-width:640px){
+  .grid{grid-template-columns:1fr}
+  .hero{padding-top:44px}
+  .sec{padding-top:44px}
+  .wrap,.hbar{padding-left:18px;padding-right:18px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hbar">
+    <a class="logo" href="https://www.equipe.one" target="_blank" rel="noopener" aria-label="equipe">
+      <svg viewBox="0 0 115 37" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M20.5506 17.609C20.5506 17.9961 20.5506 18.7709 20.5075 19.5451H5.25623C5.64378 21.3521 7.75514 23.676 10.9861 23.676C14.5623 23.676 16.5868 21.6109 16.5868 21.6109L19.1719 25.4838C19.1719 25.4838 15.9409 28.4098 10.9861 28.4098C4.78185 28.4098 0 23.676 0 17.695C0 11.714 4.35125 6.98021 10.2541 6.98021C15.8541 6.98021 20.5506 11.3262 20.5506 17.609ZM15.3805 15.8019C15.2943 14.0378 13.6573 11.671 10.2534 11.671C6.93629 11.671 5.42776 13.9948 5.25551 15.8019H15.3805Z" fill="white"/>
+        <path d="M42.5747 7.497V36.4731L37.4046 37V25.7848C36.7157 26.6457 34.8634 28.4098 31.6317 28.4098C26.3324 28.4098 21.6797 23.9778 21.6797 17.695C21.6797 11.4122 26.3331 6.98021 31.6317 6.98021C35.8537 6.98021 37.7922 10.1643 37.7922 10.1643V7.4963H42.5747V7.497ZM37.4046 15.1668C37.4046 15.1668 35.9399 11.7993 32.5366 11.7993C29.0466 11.7993 26.9359 14.3382 26.9359 17.6943C26.9359 21.0504 29.0466 23.5893 32.5366 23.5893C35.9399 23.5893 37.4046 20.2217 37.4046 20.2217V15.1668Z" fill="white"/>
+        <path d="M44.2969 20.707V7.49628H49.467V19.287C49.467 22.299 50.8887 23.5899 53.5168 23.5899C56.188 23.5899 57.5667 21.094 57.5667 21.094V7.49628H62.7368V27.8929H57.9119V26.5052C57.9119 26.5052 55.9727 28.4091 51.7937 28.4091C47.8724 28.4098 44.2969 25.6128 44.2969 20.707Z" fill="white"/>
+        <path d="M64.9297 7.49703H70.1001V27.8937H64.9297V7.49703ZM64.9297 0H70.1001V5.16386H64.9297V0Z" fill="white"/>
+        <path d="M77.0327 7.49703V10.165C77.0327 10.165 78.9708 6.98094 83.1939 6.98094C88.4932 6.98094 93.1456 11.413 93.1456 17.6958C93.1456 23.9785 88.4932 28.4105 83.1939 28.4105C79.9628 28.4105 78.1096 26.6465 77.42 25.7856V36.4731L72.2502 37V7.49703H77.0327ZM77.42 20.2232C77.42 20.2232 78.8847 23.5908 82.2887 23.5908C85.7788 23.5908 87.8897 21.0518 87.8897 17.6958C87.8897 14.3397 85.7788 11.8008 82.2887 11.8008C78.8847 11.8008 77.42 15.1683 77.42 15.1683V20.2232Z" fill="white"/>
+        <path d="M114.832 17.609C114.832 17.9961 114.832 18.7709 114.789 19.5451H99.5378C99.925 21.3521 102.037 23.676 105.268 23.676C108.844 23.676 110.868 21.6109 110.868 21.6109L113.453 25.4838C113.453 25.4838 110.223 28.4098 105.268 28.4098C99.0632 28.4098 94.2812 23.6767 94.2812 17.695C94.2812 11.714 98.6326 6.98022 104.535 6.98022C110.136 6.98022 114.832 11.3262 114.832 17.609ZM109.662 15.8019C109.576 14.0378 107.939 11.671 104.535 11.671C101.217 11.671 99.71 13.9949 99.5372 15.8019H109.662Z" fill="white"/>
+      </svg>
+    </a>
+    <span class="mono" style="color:var(--ink-30)">Onboarding</span>
+    <span class="hspacer"></span>
+    <span class="hstatus mono"><span class="dot idle" id="saveDot"></span><span id="saveTxt">Bereit</span></span>
+  </div>
+  <div class="prog" id="prog"></div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <span class="eyebrow mono"><span class="dot"></span><span id="ebText">Kundenonboarding</span></span>
+    <h1 id="greet">Hoi, <em>willkommen</em> bei equipe.</h1>
+    <p class="lede" id="lede">
+      Damit wir ab Tag 1 liefern können, brauchen wir einmal das volle Bild: eure Ziele, eure Zielgruppe,
+      eure Marke und die Zugänge. Nimm dir dafür kurz Zeit — alles, was hier steht, spart uns später Wochen.
+    </p>
+    <div class="facts">
+      <span class="fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>ca. 15–20 Minuten</span>
+      <span class="fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>speichert automatisch</span>
+      <span class="fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Zugänge verschlüsselt</span>
+    </div>
+  </section>
+
+  <!-- ============ VIDEO ============ -->
+  <section class="video">
+    <div class="video-frame" id="videoFrame">
+      <div class="vph">
+        <span class="play"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+        <p>Kurzes Willkommens-Video — wird noch ergänzt.</p>
+      </div>
+    </div>
+    <p class="vcap"><b>Was passiert jetzt?</b> <span>Im Video erklären wir dir in 3 Minuten den Ablauf der ersten 30 Tage: Kickoff, Strategie, Produktion, Go-Live.</span></p>
+  </section>
+
+  <!-- ============ FORM (aus Schema gerendert) ============ -->
+  <form id="form" novalidate>
+    <div id="sections"></div>
+
+    <!-- ============ ZUGÄNGE / VAULT ============ -->
+    <section class="sec" id="sec-zugaenge">
+      <div class="sec-head"><span class="sec-num mono">10</span><h2>Zugänge &amp; Logins</h2></div>
+      <p class="sec-intro">Wir brauchen Zugriff auf Kanäle und Werbekonten. Der sichere Weg ist immer eine <b style="color:var(--ink-85);font-weight:500">Partner-Einladung</b> — dann behältst du die Kontrolle und kannst uns jederzeit wieder entfernen. Passwörter nur, wenn eine Einladung technisch nicht geht.</p>
+      <div class="rule"></div>
+
+      <div class="note" style="margin-bottom:18px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg>
+        <div><b>So läuft die Einladung:</b> Du lädst <span style="color:var(--ink-85)">partner@equipe.one</span> als Admin/Partner in Meta Business Suite, TikTok Business Center und Google Ads ein. Wir schicken dir nach dem Absenden eine Schritt-für-Schritt-Anleitung mit unseren IDs.</div>
+      </div>
+
+      <div class="grid" id="accessGrid"></div>
+
+      <div style="margin-top:26px">
+        <div class="switch" id="vaultSwitch" role="switch" aria-checked="false" tabindex="0">
+          <span class="track"><span class="knob"></span></span>
+          <span class="txt">Ich hinterlege zusätzlich Zugangsdaten (Passwörter)
+            <small>Wird im Browser Ende-zu-Ende verschlüsselt — AES-256-GCM. Ohne dein Passwort kann niemand mitlesen, auch wir nicht.</small>
+          </span>
+        </div>
+
+        <div class="collapse" id="vaultBox">
+          <div class="note warn" style="margin-bottom:18px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+            <div><b>Bitte niemals hier eintragen:</b> Kreditkarten- oder Bankdaten, E-Banking-Zugänge, private Passwörter. Zahlungsmittel hinterlegst du ausschliesslich direkt im Meta / TikTok Business Manager.</div>
+          </div>
+
+          <div class="grid" style="margin-bottom:22px">
+            <div class="f">
+              <label for="vaultPw">Verschlüsselungs-Passwort <span class="req">*</span></label>
+              <input type="password" id="vaultPw" autocomplete="new-password" placeholder="min. 10 Zeichen">
+              <span class="hint">Frei wählbar. <b style="color:var(--ink-85);font-weight:500">Teile es uns separat mit</b> — per Telefon oder WhatsApp, nie in derselben E-Mail.</span>
+            </div>
+            <div class="f">
+              <label for="vaultPw2">Passwort wiederholen <span class="req">*</span></label>
+              <input type="password" id="vaultPw2" autocomplete="new-password" placeholder="nochmals eingeben">
+              <span class="hint" id="pwState">&nbsp;</span>
+            </div>
+          </div>
+
+          <div id="vaultRows"></div>
+          <button type="button" class="mini" id="addVault">+ Weiterer Zugang</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ UPLOADS ============ -->
+    <section class="sec" id="sec-uploads">
+      <div class="sec-head"><span class="sec-num mono">11</span><h2>Unterlagen &amp; Material</h2></div>
+      <p class="sec-intro">Alles, was uns Kontext gibt: CI/CD, Logos, Brand Guide, Produktbilder, bestehendes Footage, Broschüren, frühere Auswertungen. Landet direkt in unserem Projekt-Ordner auf Google Drive.</p>
+      <div class="rule"></div>
+      <div id="dropzones"></div>
+      <div class="grid" style="margin-top:22px">
+        <div class="f full">
+          <label for="bigLink">Link zu grossen Dateien</label>
+          <input type="url" id="bigLink" name="uploads.link" placeholder="https://drive.google.com/… oder WeTransfer / Dropbox">
+          <span class="hint">Für Footage &amp; alles über 20 MB pro Datei: lieber verlinken als hochladen.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SUBMIT ============ -->
+    <section class="submit">
+      <div class="rule"></div>
+      <label class="consent">
+        <input type="checkbox" id="consent">
+        <span>Die Angaben sind nach meinem besten Wissen korrekt. equipe darf sie zur Umsetzung des Projekts verwenden und intern im Team teilen. Zugangsdaten werden verschlüsselt übermittelt.</span>
+      </label>
+      <button type="submit" class="cta" id="submitBtn">
+        Onboarding absenden
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+      <p class="err" id="formErr"></p>
+      <p class="hint" style="margin-top:18px">Fragen zwischendurch? Schreib uns direkt an <a href="mailto:hello@equipe.one">hello@equipe.one</a>.</p>
+    </section>
+  </form>
+</main>
+
+<footer>
+  <div class="wrap frow">
+    <span>equipe one · Kundenonboarding</span>
+    <span id="footMeta">Vertraulich</span>
+  </div>
+</footer>
+
+<!-- ============ OVERLAY ============ -->
+<div class="ov" id="ov">
+  <div class="ovbox" id="ovbox"></div>
+</div>
+
+<script>
+/* =====================================================================
+   KONFIGURATION  —  hier anpassen
+   ===================================================================== */
+const CONFIG = {
+  /* Apps-Script Web-App URL (siehe README.md → Deploy). Leer = Testmodus. */
+  ENDPOINT: "",
+  /* Muss identisch zu SECRET in apps-script/Code.gs sein */
+  SECRET: "eq_onb_2026_CHANGE_ME",
+  /* Willkommens-Video: Loom-/YouTube-/Vimeo-Embed-URL. Leer = Platzhalter. */
+  VIDEO: "",
+  /* E-Mail für den Fallback, falls der Versand scheitert */
+  FALLBACK_MAIL: "hello@equipe.one",
+  MAX_FILE_MB: 20
+};
+
+/* =====================================================================
+   FRAGENKATALOG
+   Typen: text · email · tel · url · num · date · area · sel · chips · yn
+   Breite: w:'full' (sonst halbe Spalte) · req:true = Pflichtfeld
+   gate: Sektion wird erst nach „Ja" ausgeklappt
+   ===================================================================== */
+const SECTIONS = [
+{
+  num:"01", id:"unternehmen", title:"Unternehmen & Ansprechpartner",
+  intro:"Damit Rechnungen, Reportings und Freigaben bei den richtigen Personen landen.",
+  fields:[
+    {k:"firma", q:"Firmenname", t:"text", req:true},
+    {k:"website", q:"Website", t:"url", ph:"https://"},
+    {k:"branche", q:"Was macht euer Unternehmen – in einem Satz?", t:"text", w:"full"},
+    {k:"ap_name", q:"Hauptansprechpartner", t:"text", req:true},
+    {k:"ap_rolle", q:"Funktion / Rolle", t:"text"},
+    {k:"ap_mail", q:"E-Mail", t:"email", req:true},
+    {k:"ap_tel", q:"Telefon / WhatsApp", t:"tel"},
+    {k:"weitere_mails", q:"Weitere E-Mails im Projekt", t:"text", w:"full",
+     h:"Mit Komma trennen. Diese Personen erhalten Reportings und Freigabe-Anfragen."},
+    {k:"weitere_personen", q:"Weitere Personen & ihre Rolle", t:"area", w:"full",
+     h:"z.B. Marketingleitung (Freigabe), HR (Recruiting), Grafik (Assets), IT (Website)."},
+    {k:"kanal", q:"Bevorzugter Kommunikationskanal", t:"chips", w:"full",
+     o:["Mail","WhatsApp","Slack","Teams","Telefon"]},
+    {k:"start_wunsch", q:"Gewünschter Start der Zusammenarbeit", t:"date"},
+    {k:"paket", q:"Gebuchtes Paket", t:"text", ph:"z.B. equipe Package Platin", h:"Steht im Vertrag – falls unklar, leer lassen."},
+    {k:"rechnung_mail", q:"E-Mail für Rechnungen", t:"email"},
+    {k:"mwst", q:"MwSt-Nummer", t:"text", ph:"CHE-123.456.789"},
+    {k:"rechnung_adresse", q:"Rechnungsadresse", t:"area", w:"full"},
+    {k:"rechnung_ref", q:"Referenz / Kostenstelle auf der Rechnung", t:"text", w:"full",
+     h:"Nur falls euer Buchhaltungssystem das braucht."}
+  ]
+},
+{
+  num:"02", id:"ziele", title:"Vision, Ziele & Erwartungen",
+  intro:"Der wichtigste Abschnitt. Je konkreter du hier bist, desto präziser wird unsere Strategie.",
+  fields:[
+    {k:"vision", q:"Was ist die Vision deines Unternehmens?", t:"area", w:"full",
+     h:"Wo willst du in 3–5 Jahren stehen?"},
+    {k:"ziele", q:"Welche Ziele verfolgst du mit der Zusammenarbeit?", t:"area", w:"full", req:true},
+    {k:"erfolg", q:"Ab wann ist die Zusammenarbeit erfolgreich?", t:"area", w:"full", req:true,
+     h:"Qualitativ und quantitativ. Nenn uns Zahlen, wenn du kannst – z.B. „mind. 3'000 Follower, 3 Mio. Impressions, 20 Leads pro Monat“."},
+    {k:"erwartungen", q:"Was sind deine Erwartungen an uns?", t:"area", w:"full"},
+    {k:"wichtig", q:"Was ist dir während der Zusammenarbeit besonders wichtig?", t:"area", w:"full",
+     h:"Arbeitsweise, Kommunikation, Tempo, Transparenz."},
+    {k:"kpi", q:"Wichtigste Kennzahlen", t:"chips", w:"full",
+     o:["Reichweite / Views","Follower-Wachstum","Engagement","Leads","Bewerbungen","Shop-Umsatz / ROAS","Ladenbesuche","Markenbekanntheit"]},
+    {k:"horizont", q:"Zeithorizont für erste Resultate", t:"sel",
+     o:["30 Tage","90 Tage","6 Monate","12 Monate","offen"]},
+    {k:"budget_erwartung", q:"Ist das Budget für dieses Ziel intern gesichert?", t:"yn"},
+    {k:"baseline", q:"Aktuelle Zahlen als Startpunkt", t:"area", w:"full",
+     h:"Follower, Views/Monat, Leads/Monat, Umsatz/Monat, ROAS, Ø-Bestellwert – was ihr habt. Auch „noch nichts“ ist eine Antwort."},
+    {k:"bisher", q:"Was habt ihr bisher probiert – was lief gut, was nicht?", t:"area", w:"full"},
+    {k:"no_gos", q:"Gibt es No-Gos oder intern heikle Themen?", t:"area", w:"full",
+     h:"Themen, Kanäle, Formulierungen oder Personen, die wir meiden sollen."}
+  ]
+},
+{
+  num:"03", id:"markt", title:"Markt, Positionierung & Wettbewerb",
+  intro:"Damit wir Content bauen, der euch abgrenzt statt austauschbar macht.",
+  fields:[
+    {k:"angebot", q:"Welche Produkte oder Leistungen stehen im Fokus?", t:"area", w:"full", req:true,
+     h:"Mit Priorität 1–3, falls mehrere."},
+    {k:"unterschied", q:"Was unterscheidet euch von der Konkurrenz?", t:"area", w:"full"},
+    {k:"konkurrenten", q:"Die drei grössten Konkurrenten", t:"area", w:"full",
+     h:"Und was machen sie aus deiner Sicht besser als ihr?"},
+    {k:"falsche_vorstellung", q:"Welche falschen Vorstellungen gibt es über euch oder eure Branche?", t:"area", w:"full",
+     h:"z.B. „nicht cool“, „langweilig“, „zu teuer“. Genau daraus entsteht guter Content."},
+    {k:"usp_belegt", q:"Welche Aussagen dürfen wir belegt behaupten?", t:"area", w:"full",
+     h:"Zahlen, Zertifikate, Garantien, Auszeichnungen. Für Ads gilt: nur was belegbar ist."},
+    {k:"claims_verboten", q:"Welche Aussagen dürfen wir auf keinen Fall machen?", t:"area", w:"full",
+     h:"Regulatorik, Compliance, Vorgaben der Rechtsabteilung."},
+    {k:"saison", q:"Saisonalität & wichtige Termine", t:"area", w:"full",
+     h:"Black Friday, Messen, Launches, Aktionen – bitte mit Datum."},
+    {k:"regionen", q:"Märkte / Regionen", t:"chips", w:"full",
+     o:["Ganze Schweiz","Deutschschweiz","Romandie","Ticino","DACH","EU","USA","Weltweit"]},
+    {k:"kantone", q:"Konkrete Kantone, Städte oder Umkreis", t:"text", w:"full",
+     h:"Relevant für die Ausrichtung der Ads."},
+    {k:"sprachen", q:"Sprachen", t:"chips", w:"full",
+     o:["Hochdeutsch","Mundart","Französisch","Italienisch","Englisch"]}
+  ]
+},
+{
+  num:"04", id:"zielgruppe", title:"Zielgruppe",
+  intro:"Wir schreiben für Menschen, nicht für Zielgruppensegmente. Beschreib sie so, wie du sie kennst.",
+  fields:[
+    {k:"zg_primary", q:"Wer ist die primäre Zielgruppe?", t:"area", w:"full", req:true,
+     h:"Alter, Rolle, Lebenssituation – so konkret wie möglich."},
+    {k:"zg_alter", q:"Altersgruppen", t:"chips", w:"full",
+     o:["unter 18","18–24","25–34","35–44","45–54","55+"]},
+    {k:"zg_trigger", q:"Was löst den Kauf bzw. die Bewerbung aus?", t:"area"},
+    {k:"zg_einwaende", q:"Häufigste Einwände & Bedenken", t:"area"},
+    {k:"zg_nicht", q:"Wen wollen wir ausdrücklich NICHT ansprechen?", t:"area", w:"full"},
+    {k:"zg_ads", q:"Zielgruppe für Ads, falls abweichend", t:"area", w:"full"}
+  ]
+},
+{
+  num:"05", id:"marke", title:"Marke, Content & Produktion",
+  intro:"Tonalität, Formate und alles, was für die Produktion vor Ort wichtig ist.",
+  fields:[
+    {k:"ci_vorhanden", q:"Gibt es ein CI/CD bzw. einen Brand Guide?", t:"yn"},
+    {k:"ci_link", q:"Link zu CI / Brand Guide", t:"url", ph:"https://",
+     h:"Datei kannst du weiter unten auch direkt hochladen."},
+    {k:"tonalitaet", q:"Ansprache", t:"sel", o:["Du","Sie","gemischt – je Kanal","noch offen"]},
+    {k:"persoenlichkeit", q:"Markenpersönlichkeit", t:"chips", w:"full",
+     o:["nahbar","humorvoll","seriös","premium","bodenständig","innovativ","mutig","sachlich","emotional","traditionell"]},
+    {k:"claim", q:"Claim oder Slogan, der vorkommen muss", t:"text", w:"full"},
+    {k:"wording", q:"Wörter & Formulierungen: was nutzen, was vermeiden?", t:"area", w:"full"},
+    {k:"anzahl_videos", q:"Videos pro Monat", t:"num", ph:"z.B. 8"},
+    {k:"posting_tage", q:"Bevorzugte Posting-Tage / Zeiten", t:"text"},
+    {k:"plattformen", q:"Plattformen", t:"chips", w:"full",
+     o:["TikTok","Instagram","LinkedIn","Facebook","YouTube","YouTube Shorts","Pinterest","Snapchat"]},
+    {k:"formate_wunsch", q:"Formate oder Ideen, die dir gefallen", t:"area"},
+    {k:"formate_no", q:"Formate, die für euch nicht gehen", t:"area"},
+    {k:"referenzen", q:"Drei Referenz-Accounts oder Kampagnen, die euch gefallen", t:"area", w:"full",
+     h:"Links – gerne auch branchenfremd."},
+    {k:"dreh_orte", q:"Möglichkeiten für Drehtage", t:"area",
+     h:"Standorte, Ansprechperson vor Ort, mögliche Zeitfenster."},
+    {k:"dreh_personen", q:"Wer kann vor die Kamera?", t:"area",
+     h:"Geschäftsleitung, Mitarbeitende, Kunden – und wer definitiv nicht."},
+    {k:"gesichter_ok", q:"Dürfen Mitarbeitende gezeigt werden?", t:"yn",
+     h:"Falls ja: liegen Einverständniserklärungen vor?"},
+    {k:"material_vorhanden", q:"Welches Material existiert schon – und wo liegt es?", t:"area", w:"full",
+     h:"Fotos, Footage, Produktbilder, Logos, alte Kampagnen. Link oder Ordner genügt."},
+    {k:"musik_voice", q:"Ton-Präferenz", t:"chips", w:"full",
+     o:["Voiceover Hochdeutsch","Voiceover Mundart","nur Untertitel","Trending Sounds","eigene Musiklizenz"]}
+  ]
+},
+{
+  num:"06", id:"recruiting", title:"Recruiting & Employer Branding",
+  intro:"Nur relevant, wenn wir für euch auch Bewerbungen generieren.",
+  gate:{k:"recruiting_aktiv", q:"Ist Recruiting Teil des Projekts?"},
+  fields:[
+    {k:"firma_vorstellung", q:"Kurze Vorstellung der Firma für Bewerber", t:"area", w:"full"},
+    {k:"berufe", q:"Welche Stellen bewerben wir?", t:"area", w:"full",
+     h:"Mit Anzahl offener Stellen pro Beruf."},
+    {k:"anforderungen", q:"Anforderungen der Berufe", t:"area", h:"Ist ein Quereinstieg möglich?"},
+    {k:"qualifikation", q:"Müssen Bewerber einen speziellen Abschluss haben?", t:"area"},
+    {k:"tag_im_beruf", q:"Wie sieht ein Arbeitstag in diesen Berufen aus?", t:"area", w:"full",
+     h:"Pro Beruf ein paar Sätze – das ist der stärkste Content für Recruiting-Videos."},
+    {k:"benefits", q:"Was sind die Benefits?", t:"area", w:"full"},
+    {k:"warum_euch", q:"Wieso bei euch arbeiten und nicht bei der Konkurrenz?", t:"area", w:"full"},
+    {k:"chancen", q:"Welche Chancen gibt es bei euch?", t:"area",
+     h:"Entwicklung, Weiterbildung, Aufstieg."},
+    {k:"cv_optional", q:"Ist es in Ordnung, wenn der CV optional ist?", t:"yn",
+     h:"Ohne CV-Pflicht steigen die Bewerbungszahlen deutlich."},
+    {k:"bewerbungsprozess", q:"Wie läuft der Bewerbungsprozess ab?", t:"area", w:"full",
+     h:"Wer meldet sich, wie schnell, über welchen Kanal?"},
+    {k:"ats", q:"Wohin gehen die Bewerbungen?", t:"text", h:"ATS, E-Mail-Adresse oder Formular."},
+    {k:"hr_kontakt", q:"HR-Ansprechperson", t:"text"},
+    {k:"recruiting_sonstiges", q:"Ist sonst noch etwas wissenswert?", t:"area", w:"full"}
+  ]
+},
+{
+  num:"07", id:"mediabuying", title:"Mediabuying & Werbebudget",
+  intro:"Alles, was wir brauchen, um Kampagnen aufzusetzen und den Break-even zu rechnen.",
+  fields:[
+    {k:"mb_setup", q:"Braucht ihr ein Mediabuying-Setup von uns?", t:"yn"},
+    {k:"adspend", q:"Budget für Adspend pro Monat (CHF)", t:"num", ph:"z.B. 1000"},
+    {k:"budget_verteilung", q:"Budgetverteilung", t:"sel",
+     o:["Nach eurem eigenen Ermessen","Wir geben die Verteilung vor","Gemeinsam festlegen"]},
+    {k:"ads_start", q:"Startdatum für die Ads", t:"date"},
+    {k:"budget_details", q:"Falls vorgegeben: wie soll verteilt werden?", t:"area", w:"full",
+     h:"Nach Kanal, Markt, Produkt oder Kampagnenziel."},
+    {k:"ads_ueber_equipe", q:"Laufen die Ads über den equipe Ads Manager?", t:"yn",
+     h:"Alternative: euer eigenes Werbekonto, wir erhalten Partner-Zugriff."},
+    {k:"bezahl_meta", q:"Zahlungsmittel Meta", t:"sel",
+     o:["Im eigenen Business Manager hinterlegt","Wird noch hinterlegt","Läuft über equipe","Kein Meta geplant"]},
+    {k:"bezahl_tiktok", q:"Zahlungsmittel TikTok", t:"sel",
+     o:["Im eigenen Business Center hinterlegt","Wird noch hinterlegt","Läuft über equipe","Kein TikTok geplant"]},
+    {k:"note_pay", t:"note", warn:true, w:"full",
+     txt:"<b>Keine Kartendaten in dieses Formular.</b> Kreditkarte oder LSV hinterlegst du ausschliesslich direkt im Meta Business Manager bzw. TikTok Business Center. Wir fragen nie nach Zahlungsdaten."},
+    {k:"ziel_conversion", q:"Was ist die gewünschte Conversion?", t:"area", w:"full",
+     h:"Kauf, Lead-Formular, Anruf, Bewerbung, Terminbuchung – und was ist sie euch wert?"},
+    {k:"marge", q:"Bruttomarge in %", t:"text", h:"Nur bei E-Commerce – damit wir den Break-even-ROAS rechnen können."},
+    {k:"cac_ziel", q:"Ziel-CAC oder Ziel-ROAS", t:"text"},
+    {k:"landingpage", q:"Auf welche Seite sollen die Ads führen?", t:"url", w:"full", ph:"https://"},
+    {k:"bestehende_kampagnen", q:"Laufen aktuell Kampagnen? Wo und mit welchem Budget?", t:"area", w:"full"}
+  ]
+},
+{
+  num:"08", id:"accounts", title:"Bestehende Accounts, Tracking & Tools",
+  intro:"Kurz durchklicken – wir sehen dann sofort, was wir noch aufsetzen müssen.",
+  fields:[
+    {k:"acc_ig", q:"Instagram-Account vorhanden?", t:"yn"},
+    {k:"acc_tiktok_org", q:"Organischer TikTok-Account vorhanden?", t:"yn"},
+    {k:"acc_fb_page", q:"Facebook-Seite vorhanden?", t:"yn"},
+    {k:"acc_meta_suite", q:"Meta Business Suite vorhanden?", t:"yn"},
+    {k:"acc_meta_ads", q:"Meta Ads Manager vorhanden?", t:"yn"},
+    {k:"acc_tiktok_bc", q:"TikTok Business Center vorhanden?", t:"yn"},
+    {k:"acc_google", q:"Google Ads / Google Business Profil vorhanden?", t:"yn"},
+    {k:"acc_linkedin", q:"LinkedIn-Unternehmensseite vorhanden?", t:"yn"},
+    {k:"handles", q:"Handles & Links zu allen Kanälen", t:"area", w:"full",
+     h:"@instagram, @tiktok, LinkedIn-Seite, YouTube-Kanal."},
+    {k:"betreuung_heute", q:"Wer betreut die Kanäle heute – intern oder extern?", t:"text", w:"full"},
+    {k:"cms", q:"Website-CMS", t:"sel",
+     o:["Webflow","WordPress","Shopify","Squarespace","TYPO3","Wix","Eigenentwicklung","weiss ich nicht"]},
+    {k:"shop", q:"Gibt es einen Onlineshop?", t:"yn"},
+    {k:"tracking", q:"Was ist bereits eingerichtet?", t:"chips", w:"full",
+     o:["Meta Pixel","Conversions API","GA4","Google Tag Manager","TikTok Pixel","LinkedIn Tag","Server-Side Tracking","nichts davon","weiss ich nicht"]},
+    {k:"consent_tool", q:"Consent- / Cookie-Tool", t:"text", ph:"z.B. Cookiebot, Usercentrics"},
+    {k:"tracking_kontakt", q:"Wer kann technisch Änderungen an der Website machen?", t:"text"},
+    {k:"crm", q:"CRM – wohin fliessen Leads?", t:"text"},
+    {k:"newsletter", q:"E-Mail-Marketing-Tool", t:"text"}
+  ]
+},
+{
+  num:"09", id:"zusammenarbeit", title:"Zusammenarbeit, Freigaben & Rechtliches",
+  intro:"Der Teil, der später über Tempo entscheidet: klare Freigaben und klare Zuständigkeiten.",
+  fields:[
+    {k:"freigabe_wer", q:"Wer gibt Content final frei?", t:"text", w:"full"},
+    {k:"freigabe_dauer", q:"Wie schnell schafft ihr Freigaben?", t:"sel",
+     o:["innerhalb 24 Stunden","1–2 Arbeitstage","3–5 Arbeitstage","länger"]},
+    {k:"meetings", q:"Meeting-Rhythmus", t:"sel", o:["Weekly","Bi-weekly","Monatlich","Nur bei Bedarf"]},
+    {k:"freigabe_prozess", q:"Gibt es weitere Freigabe-Instanzen?", t:"area", w:"full",
+     h:"Rechtsabteilung, Geschäftsleitung, Konzernmutter, Verband."},
+    {k:"reporting", q:"Reporting-Frequenz", t:"sel",
+     o:["Monatlich","Bi-weekly","Quartalsweise","Live-Dashboard genügt"]},
+    {k:"reporting_empfaenger", q:"Wer bekommt das Reporting?", t:"text"},
+    {k:"community", q:"Community Management – wer antwortet auf Kommentare & DMs?", t:"sel", w:"full",
+     o:["equipe übernimmt komplett","equipe antwortet nach euren Vorlagen","Wir machen es selbst","noch offen"]},
+    {k:"krise", q:"Notfall-Kontakt bei kritischen Kommentaren oder Shitstorm", t:"text", w:"full"},
+    {k:"rechte", q:"Bestehende Bild-, Musik- oder Personenrechte, die wir kennen müssen", t:"area", w:"full",
+     h:"Bereits lizenzierte Musik, Fotoshootings mit begrenzter Nutzungsdauer, Testimonials mit Ablaufdatum."},
+    {k:"avv", q:"Braucht es einen Auftragsverarbeitungsvertrag (DSG/DSGVO)?", t:"yn"},
+    {k:"datenschutz_kontakt", q:"Datenschutz-Ansprechperson", t:"text"},
+    {k:"interne_hinweise", q:"Sonstiges, das wir beachten müssen", t:"area", w:"full"},
+    {k:"offen", q:"Was hätten wir fragen sollen, haben aber nicht?", t:"area", w:"full"}
+  ]
+}];
+
+/* Zugänge ohne Passwort — unverschlüsselt, weil unkritisch */
+const ACCESS = [
+  {k:"invite_mail", q:"E-Mail-Adresse, über die du uns einladen kannst", t:"email", w:"full",
+   h:"Das Konto, das Admin-Rechte in Meta / TikTok / Google hat."},
+  {k:"meta_bm_id", q:"Meta Business Manager ID", t:"text"},
+  {k:"meta_ad_id", q:"Meta Werbekonto-ID", t:"text"},
+  {k:"tiktok_bc_id", q:"TikTok Business Center ID", t:"text"},
+  {k:"google_ads_id", q:"Google Ads Kundennummer", t:"text"},
+  {k:"ga4_id", q:"GA4 Property-ID", t:"text"},
+  {k:"gtm_id", q:"Google Tag Manager Container-ID", t:"text"},
+  {k:"yt_channel", q:"YouTube-Kanal URL", t:"url", ph:"https://"},
+  {k:"li_page", q:"LinkedIn Unternehmensseite", t:"url", ph:"https://"},
+  {k:"access_notes", q:"Hinweise zu den Zugängen", t:"area", w:"full",
+   h:"Was gibt es noch, was nicht in dieser Liste steht?"}
+];
+
+const VAULT_PLATFORMS = ["Instagram","TikTok","Facebook","YouTube","LinkedIn","Website / CMS","Shop-Backend","Google","Pinterest","Sonstiges"];
+
+const DROPS = [
+  {k:"ci",         t:"CI/CD, Brand Guide & Logos",           s:"PDF, AI, EPS, SVG, PNG"},
+  {k:"bilder",     t:"Bild- & Videomaterial",                s:"Produktbilder, Footage, Fotoshootings"},
+  {k:"dokumente",  t:"Broschüren, Kataloge, Preislisten, Reportings", s:"PDF, XLSX, PPTX, DOCX"},
+  {k:"recruiting", t:"Recruiting-Unterlagen",                s:"Benefits, Stelleninserate, Organigramm"}
+];
+</script>
+
+<script>
+/* =====================================================================
+   Helpers
+   ===================================================================== */
+const $  = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const el = (t,c,h)=>{const n=document.createElement(t); if(c)n.className=c; if(h!=null)n.innerHTML=h; return n;};
+const fmtBytes = b => b<1024?b+" B" : b<1048576?(b/1024).toFixed(0)+" KB" : (b/1048576).toFixed(1)+" MB";
+
+/* Header-Status: Speicher-Zustand + dezenter Ausfüll-Stand.
+   Früh deklariert, weil restore() und applyPrefill() ihn setzen. */
+let fillPct = 0, statusWord = "Bereit";
+function renderStatus(){
+  $("#saveTxt").textContent = fillPct > 0 ? statusWord + " · " + fillPct + "%" : statusWord;
+}
+
+/* =====================================================================
+   1 · Personalisierung  ?n=Marcel&f=Muster+AG&t=token&v=videoUrl
+   ===================================================================== */
+const P = new URLSearchParams(location.search);
+const CLIENT = {
+  name:  (P.get("n") || P.get("name")  || "").trim(),
+  firma: (P.get("f") || P.get("firma") || "").trim(),
+  token: (P.get("t") || P.get("token") || "").trim()
+};
+const STORE_KEY = "eq_onb_" + (CLIENT.token || CLIENT.firma || "default").toLowerCase().replace(/[^a-z0-9]+/g,"_");
+
+(function personalize(){
+  const g = $("#greet");
+  if (CLIENT.name) {
+    g.innerHTML = "Hoi " + esc(CLIENT.name) + ",<br>willkommen bei <em>equipe</em>.";
+    document.title = "Onboarding · " + CLIENT.name + " · equipe";
+  } else {
+    g.innerHTML = "Hoi,<br>willkommen bei <em>equipe</em>.";
+  }
+  $("#ebText").textContent = CLIENT.firma ? "Onboarding · " + CLIENT.firma : "Kundenonboarding";
+  if (CLIENT.firma) $("#footMeta").textContent = CLIENT.firma + " · vertraulich";
+
+  const v = P.get("v") || CONFIG.VIDEO;
+  if (v) {
+    const f = $("#videoFrame"); f.innerHTML = "";
+    const ifr = el("iframe");
+    ifr.src = v; ifr.allow = "autoplay; fullscreen; picture-in-picture";
+    ifr.allowFullscreen = true; ifr.title = "Willkommens-Video";
+    f.appendChild(ifr);
+  }
+})();
+
+/* =====================================================================
+   2 · Formular aus Schema rendern
+   ===================================================================== */
+const YN = ["Ja","Nein","Weiss ich nicht"];
+
+function fieldNode(f, prefix){
+  if (f.t === "note"){
+    const n = el("div", "f full");
+    n.appendChild(el("div","note"+(f.warn?" warn":""),
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">'+
+      (f.warn?'<path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>'
+             :'<circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/>')+
+      '</svg><div>'+f.txt+'</div>'));
+    return n;
+  }
+
+  const name = prefix + "." + f.k;
+  const wrap = el("div", "f" + (f.w === "full" || f.t === "area" || f.t === "chips" ? " full" : ""));
+  const id = "fld_" + name.replace(/\./g,"_");
+  wrap.appendChild(el("label", null, esc(f.q) + (f.req ? ' <span class="req">*</span>' : "")))
+      .setAttribute("for", id);
+
+  if (f.t === "chips" || f.t === "yn"){
+    const opts = f.t === "yn" ? YN : f.o;
+    const single = f.t === "yn" || f.single;
+    const box = el("div","chips");
+    const hid = el("input"); hid.type="hidden"; hid.name=name; hid.id=id;
+    hid.dataset.kind = single ? "single" : "multi";
+    opts.forEach(o=>{
+      const c = el("button","chip",esc(o));
+      c.type="button"; c.setAttribute("aria-pressed","false"); c.dataset.val=o;
+      c.addEventListener("click", ()=>{
+        if (single){
+          const on = c.getAttribute("aria-pressed")==="true";
+          $$(".chip",box).forEach(x=>x.setAttribute("aria-pressed","false"));
+          c.setAttribute("aria-pressed", on ? "false":"true");
+          hid.value = on ? "" : o;
+        } else {
+          const on = c.getAttribute("aria-pressed")==="true";
+          c.setAttribute("aria-pressed", on ? "false":"true");
+          hid.value = $$('.chip[aria-pressed="true"]',box).map(x=>x.dataset.val).join(", ");
+        }
+        hid.dispatchEvent(new Event("change",{bubbles:true}));
+      });
+      box.appendChild(c);
+    });
+    wrap.appendChild(box); wrap.appendChild(hid);
+  }
+  else if (f.t === "area"){
+    const t = el("textarea"); t.name=name; t.id=id; if(f.ph)t.placeholder=f.ph;
+    wrap.appendChild(t);
+  }
+  else if (f.t === "sel"){
+    const s = el("select"); s.name=name; s.id=id;
+    s.appendChild(el("option",null,"– bitte wählen –")).value="";
+    f.o.forEach(o=>{ const op=el("option",null,esc(o)); op.value=o; s.appendChild(op); });
+    wrap.appendChild(s);
+  }
+  else {
+    const i = el("input");
+    i.type = {text:"text",email:"email",tel:"tel",url:"url",num:"number",date:"date"}[f.t] || "text";
+    i.name=name; i.id=id; if(f.ph)i.placeholder=f.ph;
+    if(f.t==="num"){ i.min="0"; i.step="any"; }
+    wrap.appendChild(i);
+  }
+  if (f.h) wrap.appendChild(el("span","hint", f.h));
+  if (f.req) wrap.dataset.req = "1";
+  return wrap;
+}
+
+(function renderSections(){
+  const host = $("#sections");
+  SECTIONS.forEach(s=>{
+    const sec = el("section","sec"); sec.id = "sec-"+s.id;
+    const head = el("div","sec-head");
+    head.appendChild(el("span","sec-num mono", s.num));
+    head.appendChild(el("h2",null, esc(s.title)));
+    sec.appendChild(head);
+    if (s.intro) sec.appendChild(el("p","sec-intro", s.intro));
+    sec.appendChild(el("div","rule"));
+
+    let target = sec;
+    if (s.gate){
+      const g = fieldNode({k:s.gate.k, q:s.gate.q, t:"yn", w:"full"}, s.id);
+      sec.appendChild(g);
+      const box = el("div","collapse"); box.id = "gate_"+s.id;
+      sec.appendChild(box);
+      target = box;
+      $("input[type=hidden]", g).addEventListener("change", e=>{
+        box.classList.toggle("open", e.target.value === "Ja");
+        updateProgress();
+      });
+    }
+    const grid = el("div","grid");
+    s.fields.forEach(f=> grid.appendChild(fieldNode(f, s.id)));
+    target.appendChild(grid);
+    host.appendChild(sec);
+  });
+
+  /* Zugänge (unverschlüsselt) */
+  const ag = $("#accessGrid");
+  ACCESS.forEach(f=> ag.appendChild(fieldNode(f, "zugaenge")));
+
+  /* Dropzones */
+  const dz = $("#dropzones");
+  DROPS.forEach(d=>{
+    const box = el("div"); box.style.marginBottom="16px";
+    const zone = el("div","drop",
+      '<div class="t">'+esc(d.t)+'</div><div class="s">'+esc(d.s)+' · klicken oder hierher ziehen</div>');
+    const inp = el("input"); inp.type="file"; inp.multiple=true; inp.hidden=true;
+    const list = el("ul","flist");
+    zone.addEventListener("click", ()=>inp.click());
+    zone.addEventListener("dragover", e=>{e.preventDefault(); zone.classList.add("over");});
+    zone.addEventListener("dragleave", ()=>zone.classList.remove("over"));
+    zone.addEventListener("drop", e=>{
+      e.preventDefault(); zone.classList.remove("over");
+      addFiles(d.k, e.dataTransfer.files, list);
+    });
+    inp.addEventListener("change", ()=>{ addFiles(d.k, inp.files, list); inp.value=""; });
+    box.append(zone, inp, list); dz.appendChild(box);
+  });
+})();
+
+/* =====================================================================
+   3 · Dateien
+   ===================================================================== */
+const FILES = {};   // {kategorie: [File]}
+function addFiles(cat, fileList, listEl){
+  FILES[cat] = FILES[cat] || [];
+  [...fileList].forEach(f=>{
+    if (f.size > CONFIG.MAX_FILE_MB*1048576){
+      alert('„'+f.name+'“ ist '+fmtBytes(f.size)+' gross – Maximum sind '+CONFIG.MAX_FILE_MB+
+            ' MB pro Datei.\n\nBitte nutze stattdessen das Feld „Link zu grossen Dateien“ weiter unten.');
+      return;
+    }
+    if (FILES[cat].some(x=>x.name===f.name && x.size===f.size)) return;
+    FILES[cat].push(f);
+  });
+  renderList(cat, listEl);
+}
+function renderList(cat, listEl){
+  listEl.innerHTML = "";
+  (FILES[cat]||[]).forEach((f,i)=>{
+    const li = el("li");
+    li.append(el("span","nm", esc(f.name)), el("span","sz", fmtBytes(f.size)));
+    const x = el("button","x","&times;"); x.type="button"; x.title="Entfernen";
+    x.addEventListener("click", ()=>{ FILES[cat].splice(i,1); renderList(cat,listEl); updateProgress(); });
+    li.appendChild(x); listEl.appendChild(li);
+  });
+  updateProgress();
+}
+const totalFiles = () => Object.values(FILES).reduce((n,a)=>n+a.length,0);
+
+/* =====================================================================
+   4 · Zugangs-Vault (AES-256-GCM, PBKDF2-SHA256)
+   ===================================================================== */
+const vaultSwitch = $("#vaultSwitch"), vaultBox = $("#vaultBox");
+function toggleVault(force){
+  const on = force!=null ? force : vaultSwitch.getAttribute("aria-checked")!=="true";
+  vaultSwitch.setAttribute("aria-checked", on ? "true":"false");
+  vaultBox.classList.toggle("open", on);
+  if (on && !$$(".vrow").length) addVaultRow();
+}
+vaultSwitch.addEventListener("click", ()=>toggleVault());
+vaultSwitch.addEventListener("keydown", e=>{ if(e.key===" "||e.key==="Enter"){e.preventDefault(); toggleVault();} });
+
+function addVaultRow(){
+  const rows = $("#vaultRows");
+  const n = $$(".vrow").length + 1;
+  const row = el("div","vrow");
+  row.innerHTML =
+    '<div class="vrow-top"><span class="mono">Zugang '+n+'</span>'+
+    '<button type="button" class="mini danger">Entfernen</button></div>'+
+    '<div class="grid">'+
+      '<div class="f"><label>Plattform</label><select data-v="platform">'+
+        VAULT_PLATFORMS.map(p=>'<option value="'+esc(p)+'">'+esc(p)+'</option>').join("")+
+      '</select></div>'+
+      '<div class="f"><label>Benutzername / E-Mail</label><input type="text" data-v="user" autocomplete="off"></div>'+
+      '<div class="f"><label>Passwort</label><input type="text" data-v="pass" autocomplete="off" spellcheck="false"></div>'+
+      '<div class="f"><label>2FA / Hinweis</label><input type="text" data-v="note" autocomplete="off" placeholder="z.B. 2FA auf Handy von Marcel"></div>'+
+    '</div>';
+  $(".mini",row).addEventListener("click", ()=>{ row.remove(); renumberVault(); });
+  rows.appendChild(row);
+}
+function renumberVault(){ $$(".vrow").forEach((r,i)=> $(".mono",r).textContent = "Zugang "+(i+1)); }
+$("#addVault").addEventListener("click", addVaultRow);
+
+$("#vaultPw2").addEventListener("input", ()=>{
+  const a=$("#vaultPw").value, b=$("#vaultPw2").value, s=$("#pwState");
+  if(!b){ s.textContent=" "; s.style.color=""; return; }
+  const ok = a===b && a.length>=10;
+  s.textContent = a!==b ? "Passwörter stimmen nicht überein" : (a.length<10 ? "Mindestens 10 Zeichen" : "Passwörter stimmen überein");
+  s.style.color = ok ? "var(--green)" : "var(--red)";
+});
+
+function collectVault(){
+  return $$(".vrow").map(r=>({
+    platform: $('[data-v="platform"]',r).value,
+    user:     $('[data-v="user"]',r).value.trim(),
+    pass:     $('[data-v="pass"]',r).value,
+    note:     $('[data-v="note"]',r).value.trim()
+  })).filter(x=>x.user||x.pass);
+}
+const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
+
+async function encryptVault(entries, password){
+  if (!(window.crypto && crypto.subtle))
+    throw new Error("Verschlüsselung nicht verfügbar – die Seite muss über HTTPS laufen.");
+  const enc  = new TextEncoder();
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv   = crypto.getRandomValues(new Uint8Array(12));
+  const iter = 310000;
+  const km   = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveKey"]);
+  const key  = await crypto.subtle.deriveKey(
+    {name:"PBKDF2", salt, iterations:iter, hash:"SHA-256"}, km,
+    {name:"AES-GCM", length:256}, false, ["encrypt"]);
+  const ct = await crypto.subtle.encrypt({name:"AES-GCM", iv}, key, enc.encode(JSON.stringify(entries)));
+  return {v:1, alg:"AES-256-GCM", kdf:"PBKDF2-SHA256", iter, salt:b64(salt), iv:b64(iv), ct:b64(ct), count:entries.length};
+}
+
+/* =====================================================================
+   5 · Autosave (Zugangsdaten werden bewusst NICHT gespeichert)
+   ===================================================================== */
+const savedFields = () => $$("#form [name]").filter(i=>!i.name.startsWith("vault"));
+let saveT;
+function markSaving(){
+  clearTimeout(saveT);
+  $("#saveDot").classList.remove("idle"); statusWord = "Speichert…"; renderStatus();
+  saveT = setTimeout(()=>{
+    const data = {}; savedFields().forEach(i=>{ if(i.value) data[i.name]=i.value; });
+    try{
+      localStorage.setItem(STORE_KEY, JSON.stringify({t:Date.now(), d:data}));
+      statusWord = "Gespeichert"; renderStatus();
+    }catch(e){ statusWord = "Nicht gespeichert"; renderStatus(); }
+  }, 500);
+}
+function restore(){
+  let raw; try{ raw = localStorage.getItem(STORE_KEY); }catch(e){ return; }
+  if(!raw) return;
+  let data; try{ data = JSON.parse(raw).d || {}; }catch(e){ return; }
+  Object.entries(data).forEach(([k,v])=>{
+    const i = $('#form [name="'+k.replace(/"/g,'')+'"]'); if(!i) return;
+    i.value = v;
+    const box = i.previousElementSibling;
+    if (i.type==="hidden" && box && box.classList.contains("chips")){
+      const vals = v.split(",").map(s=>s.trim());
+      $$(".chip",box).forEach(c=> c.setAttribute("aria-pressed", vals.includes(c.dataset.val)?"true":"false"));
+    }
+  });
+  SECTIONS.filter(s=>s.gate).forEach(s=>{
+    const g = $('#form [name="'+s.id+"."+s.gate.k+'"]');
+    if (g && g.value==="Ja") $("#gate_"+s.id).classList.add("open");
+  });
+  statusWord = "Entwurf geladen";
+  updateProgress();
+}
+restore();
+
+/* Vorbefüllung aus dem Vertrag (?p=…, erzeugt von tools/extract-contract.py).
+   Ein bestehender Entwurf hat Vorrang — überschrieben wird nur, was leer ist. */
+(function applyPrefill(){
+  const raw = P.get("p"); if(!raw) return;
+  let data;
+  try{
+    const b64 = raw.replace(/-/g,"+").replace(/_/g,"/");
+    data = JSON.parse(decodeURIComponent(escape(atob(b64 + "=".repeat((4 - b64.length % 4) % 4)))));
+  }catch(e){ return; }
+  let n = 0;
+  Object.entries(data).forEach(([k,v])=>{
+    const i = $('#form [name="'+String(k).replace(/"/g,"")+'"]');
+    if (!i || i.value) return;
+    i.value = v; n++;
+    const box = i.previousElementSibling;
+    if (i.type === "hidden" && box && box.classList.contains("chips")){
+      const vals = String(v).split(",").map(x=>x.trim());
+      $$(".chip",box).forEach(c=> c.setAttribute("aria-pressed", vals.includes(c.dataset.val)?"true":"false"));
+    }
+    const f = i.closest(".f");
+    if (f && !$(".fromcontract", f))
+      f.appendChild(el("span","hint fromcontract","Aus dem Vertrag übernommen — bitte kurz prüfen."));
+  });
+  if (n) statusWord = n + " Felder aus dem Vertrag";
+  updateProgress();
+})();
+
+/* Zuletzt die Link-Parameter als Rückfallebene — füllt nur, was noch leer ist. */
+if (CLIENT.firma){ const f=$('#form [name="unternehmen.firma"]'); if(f && !f.value) f.value = CLIENT.firma; }
+if (CLIENT.name) { const f=$('#form [name="unternehmen.ap_name"]'); if(f && !f.value) f.value = CLIENT.name; }
+updateProgress();
+$("#form").addEventListener("input", e=>{ if(!e.target.name || !e.target.name.startsWith("vault")) markSaving(); updateProgress(); });
+$("#form").addEventListener("change", e=>{ if(!e.target.name || !e.target.name.startsWith("vault")) markSaving(); updateProgress(); });
+
+/* =====================================================================
+   6 · Fortschritt
+   ===================================================================== */
+function updateProgress(){
+  const visible = savedFields().filter(i=> i.closest(".collapse") ? i.closest(".collapse").classList.contains("open") : true);
+  const filled = visible.filter(i=>i.value && i.value.trim()).length + (totalFiles()?1:0);
+  const total  = visible.length + 1;
+  fillPct = Math.min(100, Math.round(filled/total*100));
+  renderStatus();
+}
+/* Der Balken unter dem Header zeigt die Scroll-Position — bewusst zurückhaltend.
+   Primär via CSS scroll()-Timeline (läuft im Compositor), JS nur als Fallback. */
+const CSS_SCROLL = window.CSS && CSS.supports && CSS.supports("animation-timeline","scroll()");
+if (!CSS_SCROLL){
+  const bar = $("#prog");
+  const draw = ()=>{
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (max > 0 ? (window.scrollY / max) * 100 : 0).toFixed(2) + "%";
+  };
+  addEventListener("scroll", draw, {passive:true});
+  addEventListener("resize", draw, {passive:true});
+  draw();
+}
+updateProgress();
+
+/* =====================================================================
+   7 · Absenden
+   ===================================================================== */
+function collectAnswers(){
+  const out = {};
+  savedFields().forEach(i=>{
+    const v = (i.value||"").trim(); if(!v) return;
+    const [sec,key] = i.name.split(".");
+    (out[sec] = out[sec] || {})[key] = v;
+  });
+  return out;
+}
+function labelFor(sec,key){
+  const s = SECTIONS.find(x=>x.id===sec);
+  if (s){ if(s.gate&&s.gate.k===key) return s.gate.q; const f=s.fields.find(x=>x.k===key); if(f) return f.q; }
+  if (sec==="zugaenge"){ const f=ACCESS.find(x=>x.k===key); if(f) return f.q; }
+  if (sec==="uploads") return "Link zu grossen Dateien";
+  return key;
+}
+function validate(){
+  let firstBad=null;
+  $$("#form .f[data-req]").forEach(w=>{
+    const i = $("input,textarea,select",w);
+    const bad = !i.value.trim();
+    if (i.type!=="hidden") i.classList.toggle("bad", bad);
+    if (bad && !firstBad) firstBad = w;
+  });
+  return firstBad;
+}
+
+const ov = $("#ov"), ovbox = $("#ovbox");
+function showSteps(steps){
+  ov.classList.add("show");
+  ovbox.innerHTML = '<h3>Wird übermittelt…</h3><p>Bitte dieses Fenster nicht schliessen.</p><ul class="steps" id="stepList"></ul>';
+  steps.forEach(s=>{
+    const li = el("li"); li.dataset.id=s.id;
+    li.innerHTML = '<span class="ic">'+"✓"+'</span><span>'+esc(s.label)+'</span>';
+    $("#stepList").appendChild(li);
+  });
+}
+const setStep = (id,st,label)=>{
+  const li = $('#stepList li[data-id="'+id+'"]'); if(!li) return;
+  li.className = st; if(label) $("span:last-child",li).textContent = label;
+};
+
+function fileToB64(file){
+  return new Promise((res,rej)=>{
+    const r = new FileReader();
+    r.onload = ()=> res(String(r.result).split(",")[1]);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+}
+async function post(payload){
+  if (!CONFIG.ENDPOINT) { await new Promise(r=>setTimeout(r,500)); return {ok:true, test:true, id:"TESTMODUS"}; }
+  const res = await fetch(CONFIG.ENDPOINT, {
+    method:"POST", redirect:"follow",
+    headers:{"Content-Type":"text/plain;charset=utf-8"},
+    body: JSON.stringify(payload)
+  });
+  const txt = await res.text();
+  let j; try{ j = JSON.parse(txt); }catch(e){ throw new Error("Unerwartete Antwort vom Server."); }
+  if (!j.ok) throw new Error(j.error || "Server-Fehler");
+  return j;
+}
+function downloadJSON(obj, name){
+  const url = URL.createObjectURL(new Blob([JSON.stringify(obj,null,2)],{type:"application/json"}));
+  const a = el("a"); a.href=url; a.download=name; a.click(); URL.revokeObjectURL(url);
+}
+
+$("#form").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const errBox = $("#formErr"); errBox.classList.remove("show");
+  const fail = m => { errBox.textContent = m; errBox.classList.add("show"); };
+
+  const bad = validate();
+  if (bad){ fail("Bitte fülle die markierten Pflichtfelder aus."); bad.scrollIntoView({block:"center"}); return; }
+  if (!$("#consent").checked){ fail("Bitte bestätige die Einverständniserklärung."); return; }
+
+  const vaultOn = vaultSwitch.getAttribute("aria-checked")==="true";
+  const entries = vaultOn ? collectVault() : [];
+  const pw = $("#vaultPw").value;
+  if (entries.length){
+    if (pw.length < 10){ fail("Bitte setze ein Verschlüsselungs-Passwort mit mindestens 10 Zeichen."); $("#vaultPw").focus(); return; }
+    if (pw !== $("#vaultPw2").value){ fail("Die beiden Passwörter stimmen nicht überein."); $("#vaultPw2").focus(); return; }
+  }
+
+  $("#submitBtn").disabled = true;
+  const files = Object.entries(FILES).flatMap(([cat,arr])=>arr.map(f=>({cat,f})));
+  const steps = [{id:"enc",label:"Zugänge verschlüsseln"},{id:"ans",label:"Antworten übermitteln"}];
+  files.forEach((x,i)=> steps.push({id:"f"+i, label:"Datei: "+x.f.name}));
+  showSteps(steps);
+
+  const payload = {
+    secret: CONFIG.SECRET,
+    action: "submit",
+    client: {...CLIENT, firma: (collectAnswers().unternehmen||{}).firma || CLIENT.firma},
+    answers: collectAnswers(),
+    labels: (()=>{ const L={}; savedFields().forEach(i=>{ if(i.value.trim()){const[s,k]=i.name.split("."); (L[s]=L[s]||{})[k]=labelFor(s,k);} }); return L; })(),
+    fileIndex: files.map(x=>({cat:x.cat, name:x.f.name, size:x.f.size})),
+    meta: {submittedAt:new Date().toISOString(), url:location.href, ua:navigator.userAgent, tz:Intl.DateTimeFormat().resolvedOptions().timeZone}
+  };
+
+  try{
+    if (entries.length){
+      setStep("enc","run","Zugänge verschlüsseln…");
+      payload.vault = await encryptVault(entries, pw);
+    }
+    setStep("enc","done", entries.length ? entries.length+" Zugänge verschlüsselt" : "Keine Zugangsdaten");
+
+    setStep("ans","run","Antworten übermitteln…");
+    const res = await post(payload);
+    setStep("ans","done","Antworten übermittelt");
+
+    for (let i=0;i<files.length;i++){
+      const {cat,f} = files[i];
+      setStep("f"+i,"run","Lädt: "+f.name);
+      try{
+        await post({secret:CONFIG.SECRET, action:"file", id:res.id, folderId:res.folderId,
+                    cat, name:f.name, mime:f.type||"application/octet-stream", data: await fileToB64(f)});
+        setStep("f"+i,"done");
+      }catch(err){ setStep("f"+i,"", f.name+" – fehlgeschlagen"); }
+    }
+
+    try{ localStorage.removeItem(STORE_KEY); }catch(e){}
+    ovbox.innerHTML =
+      '<div class="tick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg></div>'+
+      '<h3>Danke'+(CLIENT.name?", "+esc(CLIENT.name):"")+'!</h3>'+
+      '<p>Alles ist bei uns angekommen'+(res.test?' <b>(Testmodus – nichts versendet)</b>':'')+
+      '. Wir sichten deine Angaben und melden uns innerhalb von zwei Arbeitstagen mit dem Kickoff-Termin.</p>'+
+      (entries.length ? '<div class="note" style="margin-top:22px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><div><b>Ein letzter Schritt:</b> Schick uns das Verschlüsselungs-Passwort separat – per WhatsApp oder Telefon. Ohne dieses Passwort können wir die Zugänge nicht öffnen.</div></div>' : '')+
+      '<p style="margin-top:22px"><a href="https://www.equipe.one">Zurück zu equipe.one</a></p>';
+  }catch(err){
+    ovbox.innerHTML =
+      '<h3>Das hat nicht funktioniert</h3>'+
+      '<p>'+esc(err.message||"Unbekannter Fehler")+'</p>'+
+      '<p style="margin-top:14px">Deine Eingaben sind lokal gespeichert und gehen nicht verloren. Du kannst die Antworten als Datei sichern und uns per Mail schicken – oder es später nochmals versuchen.</p>'+
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:22px">'+
+      '<button type="button" class="cta" id="dl">Antworten als Datei sichern</button>'+
+      '<button type="button" class="mini" id="close">Zurück zum Formular</button></div>'+
+      '<p class="hint" style="margin-top:16px">Datei bitte an <a href="mailto:'+CONFIG.FALLBACK_MAIL+'">'+CONFIG.FALLBACK_MAIL+'</a></p>';
+    $("#dl").addEventListener("click", ()=> downloadJSON(payload, "onboarding-"+((payload.client.firma||"equipe").replace(/[^\w]+/g,"-"))+".json"));
+    $("#close").addEventListener("click", ()=>{ ov.classList.remove("show"); $("#submitBtn").disabled=false; });
+  }
+});
+</script>
+</body>
+</html>
