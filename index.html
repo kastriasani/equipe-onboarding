@@ -173,6 +173,14 @@ option{background:#1c1d1c;color:#fff}
 .switch .txt small{display:block;color:var(--ink-45);font-size:12.5px;margin-top:2px}
 .collapse{display:none;margin-top:22px}
 .collapse.open{display:block;animation:fade .3s ease}
+.collapse.grid{margin-top:0}
+.collapse.grid.open{display:grid;margin-top:14px}
+.kanaele{margin-top:18px;display:flex;flex-direction:column;gap:14px}
+.kanal{border:1px solid var(--line);background:var(--card);border-radius:var(--r-16);padding:18px 18px 20px}
+.kanal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.kanal-top .mono{color:var(--green)}
+.kanal .grid{gap:14px}
+.kanal .grid + .grid:not(.collapse){margin-top:14px}
 @keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
 
 /* vault rows */
@@ -399,6 +407,41 @@ const CONFIG = {
   MAX_FILE_MB: 20
 };
 
+/* Werbekanäle: Auswahl oben in Abschnitt 07. Eigene Kanäle kann der Kunde
+   selbst ergänzen — die Karte wird dafür genauso gebaut. */
+const AD_KANAELE = [
+  "Meta (Facebook & Instagram)", "TikTok", "Google Ads", "YouTube", "LinkedIn",
+  "Pinterest", "Snapchat", "Spotify / Audio", "Digital Out of Home"
+];
+
+/* Fragen je Kanal. „ja“ und „nein“ hängen an der Setup-Antwort und erscheinen
+   nur dann — die Login-Fragen fallen bei „Nein“ also automatisch weg. */
+const KANAL_FELDER = {
+  immer: [
+    {k:"setup", q:"Bestehendes Werbekonto vorhanden?", t:"yn", w:"full"},
+    {k:"budget", q:"Budget pro Monat (CHF)", t:"num", ph:"z.B. 1000"},
+    {k:"zahlung", q:"Wer zahlt den Adspend?", t:"sel",
+     o:["Zahlungsmittel ist bei uns hinterlegt","Wird noch hinterlegt","equipe verauslagt und stellt weiter","noch offen"]},
+    {k:"zielgruppe", q:"Zielgruppe & Ausrichtung auf diesem Kanal", t:"area", w:"full",
+     h:"Wen sollen wir hier erreichen? Region, Alter, Interessen — und wen ausdrücklich nicht."}
+  ],
+  ja: [
+    {k:"konto_id", q:"Werbekonto- oder Business-ID", t:"text", h:"Falls zur Hand — sonst später."},
+    {k:"zugriff", q:"Wer hat heute Zugriff?", t:"text", h:"Intern oder eine andere Agentur?"},
+    {k:"zugang_via", q:"Wie bekommen wir Zugriff?", t:"sel", w:"full",
+     o:["Partner-Einladung (empfohlen)","Zugangsdaten im verschlüsselten Bereich weiter unten","noch offen"]}
+  ],
+  nein: [
+    {k:"einrichtung", q:"Wer richtet das Konto ein?", t:"sel", o:["equipe","Wir selbst","Gemeinsam"]},
+    {k:"inhaber", q:"Auf wen läuft das Konto?", t:"sel",
+     o:["Auf uns (Kunde)","Auf equipe","noch offen"],
+     h:"Empfehlung: auf euch — dann bleiben Konto, Daten und Historie bei euch."}
+  ],
+  ende: [
+    {k:"notiz", q:"Notiz zu diesem Kanal", t:"text", w:"full"}
+  ]
+};
+
 /* =====================================================================
    FRAGENKATALOG
    Typen: text · email · tel · url · num · date · area · sel · chips · yn
@@ -556,29 +599,27 @@ const SECTIONS = [
 },
 {
   num:"07", id:"mediabuying", title:"Mediabuying & Werbebudget",
-  intro:"Alles, was wir brauchen, um Kampagnen aufzusetzen und den Break-even zu rechnen.",
+  intro:"Zuerst die Kanäle — danach fragen wir pro Kanal nur das, was dort wirklich zutrifft.",
   fields:[
-    {k:"mb_setup", q:"Braucht ihr ein Mediabuying-Setup von uns?", t:"yn"},
-    {k:"adspend", q:"Budget für Adspend pro Monat (CHF)", t:"num", ph:"z.B. 1000"},
+    {k:"kanaele", q:"Auf welchen Kanälen sollen Ads laufen?", t:"channels", w:"full",
+     frei:"Weiterer Kanal", o:AD_KANAELE,
+     h:"Auch Kanäle, für die noch nichts aufgesetzt ist — genau die klären wir hier."},
+    {k:"note_pay", t:"note", warn:true, w:"full",
+     txt:"<b>Keine Kartendaten in dieses Formular.</b> Kreditkarte oder LSV hinterlegt ihr ausschliesslich direkt im jeweiligen Werbekonto. Wir fragen nur, <i>wer</i> zahlt — nie <i>womit</i>."},
+    {k:"gesamtbudget", q:"Gesamtbudget für Adspend pro Monat (CHF)", t:"num", ph:"z.B. 5000",
+     h:"Über alle Kanäle. Falls die Aufteilung noch offen ist, hier die Gesamtsumme."},
     {k:"budget_verteilung", q:"Budgetverteilung", t:"sel",
      o:["Nach eurem eigenen Ermessen","Wir geben die Verteilung vor","Gemeinsam festlegen"]},
     {k:"ads_start", q:"Startdatum für die Ads", t:"date"},
-    {k:"budget_details", q:"Falls vorgegeben: wie soll verteilt werden?", t:"area", w:"full",
-     h:"Nach Kanal, Markt, Produkt oder Kampagnenziel."},
-    {k:"ads_ueber_equipe", q:"Laufen die Ads über den equipe Ads Manager?", t:"yn",
-     h:"Alternative: euer eigenes Werbekonto, wir erhalten Partner-Zugriff."},
-    {k:"bezahl_meta", q:"Zahlungsmittel Meta", t:"sel",
-     o:["Im eigenen Business Manager hinterlegt","Wird noch hinterlegt","Läuft über equipe","Kein Meta geplant"]},
-    {k:"bezahl_tiktok", q:"Zahlungsmittel TikTok", t:"sel",
-     o:["Im eigenen Business Center hinterlegt","Wird noch hinterlegt","Läuft über equipe","Kein TikTok geplant"]},
-    {k:"note_pay", t:"note", warn:true, w:"full",
-     txt:"<b>Keine Kartendaten in dieses Formular.</b> Kreditkarte oder LSV hinterlegst du ausschliesslich direkt im Meta Business Manager bzw. TikTok Business Center. Wir fragen nie nach Zahlungsdaten."},
     {k:"ziel_conversion", q:"Was ist die gewünschte Conversion?", t:"area", w:"full",
-     h:"Kauf, Lead-Formular, Anruf, Bewerbung, Terminbuchung – und was ist sie euch wert?"},
-    {k:"marge", q:"Bruttomarge in %", t:"text", h:"Nur bei E-Commerce – damit wir den Break-even-ROAS rechnen können."},
+     h:"Kauf, Lead-Formular, Anruf, Bewerbung, Terminbuchung — und was ist sie euch wert?"},
+    {k:"marge", q:"Bruttomarge in %", t:"text",
+     h:"Nur bei E-Commerce — damit wir den Break-even-ROAS rechnen können."},
     {k:"cac_ziel", q:"Ziel-CAC oder Ziel-ROAS", t:"text"},
     {k:"landingpage", q:"Auf welche Seite sollen die Ads führen?", t:"url", w:"full", ph:"https://"},
-    {k:"bestehende_kampagnen", q:"Laufen aktuell Kampagnen? Wo und mit welchem Budget?", t:"area", w:"full"}
+    {k:"bestehende_kampagnen", q:"Laufen aktuell Kampagnen? Wo und mit welchem Budget?", t:"area", w:"full"},
+    {k:"mb_kommentar", q:"Sonstiges zum Mediabuying", t:"area", w:"full",
+     h:"Alles, was oben keinen Platz hatte: Agenturwechsel, Altlasten, gesperrte Konten, geplante Aktionen."}
   ]
 },
 {
@@ -589,9 +630,6 @@ const SECTIONS = [
     {k:"acc_tiktok_org", q:"Organischer TikTok-Account vorhanden?", t:"yn"},
     {k:"acc_fb_page", q:"Facebook-Seite vorhanden?", t:"yn"},
     {k:"acc_meta_suite", q:"Meta Business Suite vorhanden?", t:"yn"},
-    {k:"acc_meta_ads", q:"Meta Ads Manager vorhanden?", t:"yn"},
-    {k:"acc_tiktok_bc", q:"TikTok Business Center vorhanden?", t:"yn"},
-    {k:"acc_google", q:"Google Ads / Google Business Profil vorhanden?", t:"yn"},
     {k:"acc_linkedin", q:"LinkedIn-Unternehmensseite vorhanden?", t:"yn"},
     {k:"handles", q:"Handles & Links zu allen Kanälen", t:"area", w:"full",
      h:"@instagram, @tiktok, LinkedIn-Seite, YouTube-Kanal."},
@@ -636,10 +674,6 @@ const SECTIONS = [
 const ACCESS = [
   {k:"invite_mail", q:"E-Mail-Adresse, über die du uns einladen kannst", t:"email", w:"full",
    h:"Das Konto, das Admin-Rechte in Meta / TikTok / Google hat."},
-  {k:"meta_bm_id", q:"Meta Business Manager ID", t:"text"},
-  {k:"meta_ad_id", q:"Meta Werbekonto-ID", t:"text"},
-  {k:"tiktok_bc_id", q:"TikTok Business Center ID", t:"text"},
-  {k:"google_ads_id", q:"Google Ads Kundennummer", t:"text"},
   {k:"ga4_id", q:"GA4 Property-ID", t:"text"},
   {k:"gtm_id", q:"Google Tag Manager Container-ID", t:"text"},
   {k:"yt_channel", q:"YouTube-Kanal URL", t:"url", ph:"https://"},
@@ -670,6 +704,10 @@ const fmtBytes = b => b<1024?b+" B" : b<1048576?(b/1024).toFixed(0)+" KB" : (b/1
 
 /* Header-Status: Speicher-Zustand + dezenter Ausfüll-Stand.
    Früh deklariert, weil restore() und applyPrefill() ihn setzen. */
+/* Ein Feld zählt nur, wenn es auch sichtbar ist — sonst landen Antworten aus
+   zugeklappten Bereichen im Sheet und widersprechen den sichtbaren. */
+const sichtbar = i => { const c = i.closest(".collapse"); return !c || c.classList.contains("open"); };
+
 let fillPct = 0, statusWord = "Bereit";
 function renderStatus(){
   $("#saveTxt").textContent = fillPct > 0 ? statusWord + " · " + fillPct + "%" : statusWord;
@@ -729,6 +767,8 @@ function setChips(box, value){
     const add = $(".chip.add", box), chip = box._makeChip(v, true);
     add ? add.before(chip) : box.appendChild(chip);
   });
+  /* weitermelden — sonst wüssten die Kanal-Karten nichts von der Wiederherstellung */
+  if (box._hid) box._hid.dispatchEvent(new Event("change", {bubbles:true}));
 }
 
 function fieldNode(f, prefix){
@@ -748,7 +788,7 @@ function fieldNode(f, prefix){
   wrap.appendChild(el("label", null, esc(f.q) + (f.req ? ' <span class="req">*</span>' : "")))
       .setAttribute("for", id);
 
-  if (f.t === "chips" || f.t === "yn"){
+  if (f.t === "chips" || f.t === "yn" || f.t === "channels"){
     const opts = f.t === "yn" ? YN : f.o;
     const single = f.t === "yn" || f.single;
     const box = el("div","chips");
@@ -816,8 +856,30 @@ function fieldNode(f, prefix){
       box.appendChild(add);
     }
 
-    box._makeChip = makeChip;
+    box._makeChip = makeChip; box._hid = hid;
     wrap.appendChild(box); wrap.appendChild(hid);
+
+    /* Kanal-Matrix: pro gewähltem Kanal eine eigene Karte, die sich nach den
+       Antworten darin richtet. */
+    if (f.t === "channels"){
+      if (f.h){ wrap.appendChild(el("span","hint", f.h)); wrap._hintDone = true; }
+      const host = el("div","kanaele");
+      const leer = el("p","hint","Noch kein Kanal gewählt — oben auswählen, dann erscheinen die Fragen dazu.");
+      host.appendChild(leer);
+      wrap.appendChild(host);
+      hid.addEventListener("change", ()=>{
+        const gewaehlt = $$('.chip[aria-pressed="true"]', box).map(c=>({
+          v: c.dataset.val,
+          k: c.dataset.val.toLowerCase()
+               .replace(/[äàáâ]/g,"a").replace(/[öòóô]/g,"o").replace(/[üùúû]/g,"u").replace(/ß/g,"ss")
+               .replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"").slice(0,20)
+        }));
+        const da = $$(".kanal", host).map(c=>c.dataset.k);
+        $$(".kanal", host).forEach(c=>{ if(!gewaehlt.some(g=>g.k===c.dataset.k)) c.remove(); });
+        gewaehlt.forEach(g=>{ if(!da.includes(g.k)) host.appendChild(kanalKarte(prefix, g)); });
+        leer.style.display = gewaehlt.length ? "none" : "";
+      });
+    }
   }
   else if (f.t === "area"){
     const t = el("textarea"); t.name=name; t.id=id; if(f.ph)t.placeholder=f.ph;
@@ -836,9 +898,40 @@ function fieldNode(f, prefix){
     if(f.t==="num"){ i.min="0"; i.step="any"; }
     wrap.appendChild(i);
   }
-  if (f.h) wrap.appendChild(el("span","hint", f.h));
+  if (f.h && !wrap._hintDone) wrap.appendChild(el("span","hint", f.h));
   if (f.req) wrap.dataset.req = "1";
+  /* Klartext-Bezeichnung fürs Sheet und das Google Doc */
+  const feld = $("input,textarea,select", wrap);
+  if (feld) feld.dataset.label = f.label || f.q;
   return wrap;
+}
+
+/* ---- eine Karte pro Werbekanal ------------------------------------------- */
+function kanalKarte(prefix, chan){
+  const card = el("div","kanal"); card.dataset.k = chan.k;
+  card.appendChild(el("div","kanal-top",'<span class="mono">' + esc(chan.v) + '</span>'));
+
+  const bau = (arr, cls) => {
+    const g = el("div", "grid" + (cls ? " collapse " + cls : ""));
+    arr.forEach(ff => g.appendChild(fieldNode(
+      {...ff, k: "kanal_" + chan.k + "_" + ff.k, label: chan.v + " — " + ff.q}, prefix)));
+    return g;
+  };
+  const gImmer = bau(KANAL_FELDER.immer);
+  const gJa    = bau(KANAL_FELDER.ja,   "wenn-ja");
+  const gNein  = bau(KANAL_FELDER.nein, "wenn-nein");
+  const gEnde  = bau(KANAL_FELDER.ende);
+  card.append(gImmer, gJa, gNein, gEnde);
+
+  const setup = $('[name="' + prefix + '.kanal_' + chan.k + '_setup"]', gImmer);
+  const richten = ()=>{
+    gJa.classList.toggle("open",   setup.value === "Ja");
+    gNein.classList.toggle("open", setup.value === "Nein");
+    updateProgress();
+  };
+  setup.addEventListener("change", richten);
+  richten();
+  return card;
 }
 
 (function renderSections(){
@@ -1011,12 +1104,17 @@ function restore(){
   let raw; try{ raw = localStorage.getItem(STORE_KEY); }catch(e){ return; }
   if(!raw) return;
   let data; try{ data = JSON.parse(raw).d || {}; }catch(e){ return; }
-  Object.entries(data).forEach(([k,v])=>{
-    const i = $('#form [name="'+k.replace(/"/g,'')+'"]'); if(!i) return;
+  /* Zwei Durchgänge: der erste setzt die Kanal-Auswahl, wodurch die Karten
+     entstehen; der zweite füllt die Felder darin. */
+  const setzen = ([k,v])=>{
+    const i = $('#form [name="'+k.replace(/"/g,'')+'"]'); if(!i) return false;
     i.value = v;
     const box = i.previousElementSibling;
     if (i.type==="hidden" && box && box.classList.contains("chips")) setChips(box, v);
-  });
+    return true;
+  };
+  const rest = Object.entries(data).filter(e=>!setzen(e));
+  rest.forEach(setzen);
   SECTIONS.filter(s=>s.gate).forEach(s=>{
     const g = $('#form [name="'+s.id+"."+s.gate.k+'"]');
     if (g && g.value==="Ja") $("#gate_"+s.id).classList.add("open");
@@ -1061,7 +1159,7 @@ $("#form").addEventListener("change", e=>{ if(!e.target.name || !e.target.name.s
    6 · Fortschritt
    ===================================================================== */
 function updateProgress(){
-  const visible = savedFields().filter(i=> i.closest(".collapse") ? i.closest(".collapse").classList.contains("open") : true);
+  const visible = savedFields().filter(sichtbar);
   const filled = visible.filter(i=>i.value && i.value.trim()).length + (totalFiles()?1:0);
   const total  = visible.length + 1;
   fillPct = Math.min(100, Math.round(filled/total*100));
@@ -1087,7 +1185,7 @@ updateProgress();
    ===================================================================== */
 function collectAnswers(){
   const out = {};
-  savedFields().forEach(i=>{
+  savedFields().filter(sichtbar).forEach(i=>{
     const v = (i.value||"").trim(); if(!v) return;
     const [sec,key] = i.name.split(".");
     (out[sec] = out[sec] || {})[key] = v;
@@ -1180,7 +1278,11 @@ $("#form").addEventListener("submit", async e=>{
     action: "submit",
     client: {...CLIENT, firma: (collectAnswers().unternehmen||{}).firma || CLIENT.firma},
     answers: collectAnswers(),
-    labels: (()=>{ const L={}; savedFields().forEach(i=>{ if(i.value.trim()){const[s,k]=i.name.split("."); (L[s]=L[s]||{})[k]=labelFor(s,k);} }); return L; })(),
+    labels: (()=>{ const L={}; savedFields().filter(sichtbar).forEach(i=>{
+      if(!i.value.trim()) return;
+      const [s,k] = i.name.split(".");
+      (L[s]=L[s]||{})[k] = i.dataset.label || labelFor(s,k);
+    }); return L; })(),
     fileIndex: files.map(x=>({cat:x.cat, name:x.f.name, size:x.f.size})),
     meta: {submittedAt:new Date().toISOString(), url:location.href, ua:navigator.userAgent, tz:Intl.DateTimeFormat().resolvedOptions().timeZone}
   };
