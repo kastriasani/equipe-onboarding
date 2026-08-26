@@ -175,6 +175,8 @@ option{background:#1c1d1c;color:#fff}
 .collapse.open{display:block;animation:fade .3s ease}
 .collapse.grid{margin-top:0}
 .collapse.grid.open{display:grid;margin-top:14px}
+.f.collapse{margin:0}
+.f.collapse.open{display:flex}
 .kanaele{margin-top:18px;display:flex;flex-direction:column;gap:14px}
 .kanal{border:1px solid var(--line);background:var(--card);border-radius:var(--r-16);padding:18px 18px 20px}
 .kanal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
@@ -417,6 +419,7 @@ const AD_KANAELE = [
 /* Fragen je Kanal. „ja“ und „nein“ hängen an der Setup-Antwort und erscheinen
    nur dann — die Login-Fragen fallen bei „Nein“ also automatisch weg. */
 const KANAL_FELDER = {
+  schalter: "setup",
   immer: [
     {k:"setup", q:"Bestehendes Werbekonto vorhanden?", t:"yn", w:"full"},
     {k:"budget", q:"Budget pro Monat (CHF)", t:"num", ph:"z.B. 1000"},
@@ -442,6 +445,25 @@ const KANAL_FELDER = {
   ]
 };
 
+/* Organische Kanäle: gespiegelt aus „Plattformen“ in Abschnitt 05 —
+   dort gewählt, hier gefragt. Keine feste Plattformliste mehr. */
+const ORG_FELDER = {
+  schalter: "vorhanden",
+  immer: [
+    {k:"vorhanden", q:"Account vorhanden?", t:"yn", w:"full"}
+  ],
+  ja: [
+    {k:"handle", q:"Handle oder Link", t:"text", ph:"@name oder URL"},
+    {k:"betreuung", q:"Wer betreut ihn heute?", t:"text", h:"Intern, eine Agentur oder niemand."},
+    {k:"zugang_via", q:"Wie bekommen wir Zugriff?", t:"sel", w:"full",
+     o:["Partner-Einladung (empfohlen)","Zugangsdaten im verschlüsselten Bereich weiter unten","noch offen"]}
+  ],
+  nein: [
+    {k:"anlegen", q:"Wer legt den Account an?", t:"sel", o:["equipe","Wir selbst","Gemeinsam"]},
+    {k:"wunsch_handle", q:"Wunsch-Handle", t:"text", ph:"@name"}
+  ]
+};
+
 /* =====================================================================
    FRAGENKATALOG
    Typen: text · email · tel · url · num · date · area · sel · chips · yn
@@ -464,7 +486,7 @@ const SECTIONS = [
      h:"Mit Komma trennen. Diese Personen erhalten Reportings und Freigabe-Anfragen."},
     {k:"weitere_personen", q:"Weitere Personen & ihre Rolle", t:"area", w:"full",
      h:"z.B. Marketingleitung (Freigabe), HR (Recruiting), Grafik (Assets), IT (Website)."},
-    {k:"kanal", q:"Bevorzugter Kommunikationskanal", t:"chips", w:"full",
+    {k:"kanal", q:"Bevorzugter Kommunikationskanal", t:"chips", w:"full", frei:"Anderer Kanal",
      o:["Mail","WhatsApp","Slack","Teams","Telefon"]},
     {k:"start_wunsch", q:"Gewünschter Start der Zusammenarbeit", t:"date"},
     {k:"paket", q:"Gebuchtes Paket", t:"text", ph:"z.B. equipe Package Platin", h:"Steht im Vertrag – falls unklar, leer lassen."},
@@ -487,7 +509,7 @@ const SECTIONS = [
     {k:"erwartungen", q:"Was sind deine Erwartungen an uns?", t:"area", w:"full"},
     {k:"wichtig", q:"Was ist dir während der Zusammenarbeit besonders wichtig?", t:"area", w:"full",
      h:"Arbeitsweise, Kommunikation, Tempo, Transparenz."},
-    {k:"kpi", q:"Wichtigste Kennzahlen", t:"chips", w:"full",
+    {k:"kpi", q:"Wichtigste Kennzahlen", t:"chips", w:"full", frei:"Weitere Kennzahl",
      h:"Grobe Richtung – die konkreten Zielwerte dazu kommen in der nächsten Frage.",
      o:["Reichweite / Views","Follower-Wachstum","Engagement","Leads","Bewerbungen","Shop-Umsatz / ROAS","Ladenbesuche","Markenbekanntheit"]},
     {k:"horizont", q:"Zeithorizont für erste Resultate", t:"sel",
@@ -517,7 +539,7 @@ const SECTIONS = [
      h:"Regulatorik, Compliance, Vorgaben der Rechtsabteilung."},
     {k:"saison", q:"Saisonalität & wichtige Termine", t:"area", w:"full",
      h:"Black Friday, Messen, Launches, Aktionen – bitte mit Datum."},
-    {k:"regionen", q:"Märkte / Regionen", t:"chips", w:"full",
+    {k:"regionen", q:"Märkte / Regionen", t:"chips", w:"full", frei:"Weiterer Markt",
      o:["Ganze Schweiz","Deutschschweiz","Romandie","Ticino","DACH","EU","USA","Weltweit"]},
     {k:"kantone", q:"Konkrete Kantone, Städte oder Umkreis", t:"text", w:"full",
      h:"Relevant für die Ausrichtung der Ads."},
@@ -536,8 +558,7 @@ const SECTIONS = [
      o:["unter 18","18–24","25–34","35–44","45–54","55+"]},
     {k:"zg_trigger", q:"Was löst den Kauf bzw. die Bewerbung aus?", t:"area"},
     {k:"zg_einwaende", q:"Häufigste Einwände & Bedenken", t:"area"},
-    {k:"zg_nicht", q:"Wen wollen wir ausdrücklich NICHT ansprechen?", t:"area", w:"full"},
-    {k:"zg_ads", q:"Zielgruppe für Ads, falls abweichend", t:"area", w:"full"}
+    {k:"zg_nicht", q:"Wen wollen wir ausdrücklich NICHT ansprechen?", t:"area", w:"full"}
   ]
 },
 {
@@ -545,16 +566,17 @@ const SECTIONS = [
   intro:"Tonalität, Formate und alles, was für die Produktion vor Ort wichtig ist.",
   fields:[
     {k:"ci_vorhanden", q:"Gibt es ein CI/CD bzw. einen Brand Guide?", t:"yn"},
-    {k:"ci_link", q:"Link zu CI / Brand Guide", t:"url", ph:"https://",
+    {k:"ci_link", q:"Link zu CI / Brand Guide", t:"url", ph:"https://", wenn:{feld:"ci_vorhanden", ist:"Ja"},
      h:"Datei kannst du weiter unten auch direkt hochladen."},
     {k:"tonalitaet", q:"Ansprache", t:"sel", o:["Du","Sie","gemischt – je Kanal","noch offen"]},
-    {k:"persoenlichkeit", q:"Markenpersönlichkeit", t:"chips", w:"full",
+    {k:"persoenlichkeit", q:"Markenpersönlichkeit", t:"chips", w:"full", frei:"Eigenes Attribut",
      o:["nahbar","humorvoll","seriös","premium","bodenständig","innovativ","mutig","sachlich","emotional","traditionell"]},
     {k:"claim", q:"Claim oder Slogan, der vorkommen muss", t:"text", w:"full"},
     {k:"wording", q:"Wörter & Formulierungen: was nutzen, was vermeiden?", t:"area", w:"full"},
     {k:"anzahl_videos", q:"Videos pro Monat", t:"num", ph:"z.B. 8"},
     {k:"posting_tage", q:"Bevorzugte Posting-Tage / Zeiten", t:"text"},
-    {k:"plattformen", q:"Plattformen", t:"chips", w:"full",
+    {k:"plattformen", q:"Plattformen", t:"chips", w:"full", frei:"Weitere Plattform",
+     h:"Diese Auswahl steuert Abschnitt 08 — dort fragen wir je Kanal die Details ab.",
      o:["TikTok","Instagram","LinkedIn","Facebook","YouTube","YouTube Shorts","Pinterest","Snapchat"]},
     {k:"formate_wunsch", q:"Formate oder Ideen, die dir gefallen", t:"area"},
     {k:"formate_no", q:"Formate, die für euch nicht gehen", t:"area"},
@@ -564,11 +586,13 @@ const SECTIONS = [
      h:"Standorte, Ansprechperson vor Ort, mögliche Zeitfenster."},
     {k:"dreh_personen", q:"Wer kann vor die Kamera?", t:"area",
      h:"Geschäftsleitung, Mitarbeitende, Kunden – und wer definitiv nicht."},
-    {k:"gesichter_ok", q:"Dürfen Mitarbeitende gezeigt werden?", t:"yn",
-     h:"Falls ja: liegen Einverständniserklärungen vor?"},
+    {k:"gesichter_ok", q:"Dürfen Mitarbeitende gezeigt werden?", t:"yn"},
+    {k:"einverstaendnis", q:"Liegen Einverständniserklärungen vor?", t:"sel", wenn:{feld:"gesichter_ok", ist:"Ja"},
+     o:["Ja, für alle","Teilweise","Nein, müssen wir noch einholen"],
+     h:"Ohne Einwilligung dürfen wir Gesichter nicht veröffentlichen."},
     {k:"material_vorhanden", q:"Welches Material existiert schon – und wo liegt es?", t:"area", w:"full",
      h:"Fotos, Footage, Produktbilder, Logos, alte Kampagnen. Link oder Ordner genügt."},
-    {k:"musik_voice", q:"Ton-Präferenz", t:"chips", w:"full",
+    {k:"musik_voice", q:"Ton-Präferenz", t:"chips", w:"full", frei:"Andere Präferenz",
      o:["Voiceover Hochdeutsch","Voiceover Mundart","nur Untertitel","Trending Sounds","eigene Musiklizenz"]}
   ]
 },
@@ -602,7 +626,7 @@ const SECTIONS = [
   intro:"Zuerst die Kanäle — danach fragen wir pro Kanal nur das, was dort wirklich zutrifft.",
   fields:[
     {k:"kanaele", q:"Auf welchen Kanälen sollen Ads laufen?", t:"channels", w:"full",
-     frei:"Weiterer Kanal", o:AD_KANAELE,
+     frei:"Weiterer Kanal", o:AD_KANAELE, spec:KANAL_FELDER,
      h:"Auch Kanäle, für die noch nichts aufgesetzt ist — genau die klären wir hier."},
     {k:"note_pay", t:"note", warn:true, w:"full",
      txt:"<b>Keine Kartendaten in dieses Formular.</b> Kreditkarte oder LSV hinterlegt ihr ausschliesslich direkt im jeweiligen Werbekonto. Wir fragen nur, <i>wer</i> zahlt — nie <i>womit</i>."},
@@ -613,8 +637,10 @@ const SECTIONS = [
     {k:"ads_start", q:"Startdatum für die Ads", t:"date"},
     {k:"ziel_conversion", q:"Was ist die gewünschte Conversion?", t:"area", w:"full",
      h:"Kauf, Lead-Formular, Anruf, Bewerbung, Terminbuchung — und was ist sie euch wert?"},
-    {k:"marge", q:"Bruttomarge in %", t:"text",
-     h:"Nur bei E-Commerce — damit wir den Break-even-ROAS rechnen können."},
+    {k:"ecom", q:"Verkauft ihr online?", t:"yn",
+     h:"Onlineshop oder Buchungsstrecke mit messbarem Umsatz."},
+    {k:"marge", q:"Bruttomarge in %", t:"text", wenn:{feld:"ecom", ist:"Ja"},
+     h:"Damit wir den Break-even-ROAS rechnen können: unter dieser Grenze kostet Werbung mehr als sie bringt."},
     {k:"cac_ziel", q:"Ziel-CAC oder Ziel-ROAS", t:"text"},
     {k:"landingpage", q:"Auf welche Seite sollen die Ads führen?", t:"url", w:"full", ph:"https://"},
     {k:"bestehende_kampagnen", q:"Laufen aktuell Kampagnen? Wo und mit welchem Budget?", t:"area", w:"full"},
@@ -624,23 +650,17 @@ const SECTIONS = [
 },
 {
   num:"08", id:"accounts", title:"Bestehende Accounts, Tracking & Tools",
-  intro:"Kurz durchklicken – wir sehen dann sofort, was wir noch aufsetzen müssen.",
+  intro:"Pro Kanal, den ihr bespielt, klären wir genau das, was dort offen ist — der Rest bleibt aus dem Weg.",
   fields:[
-    {k:"acc_ig", q:"Instagram-Account vorhanden?", t:"yn"},
-    {k:"acc_tiktok_org", q:"Organischer TikTok-Account vorhanden?", t:"yn"},
-    {k:"acc_fb_page", q:"Facebook-Seite vorhanden?", t:"yn"},
-    {k:"acc_meta_suite", q:"Meta Business Suite vorhanden?", t:"yn"},
-    {k:"acc_linkedin", q:"LinkedIn-Unternehmensseite vorhanden?", t:"yn"},
-    {k:"handles", q:"Handles & Links zu allen Kanälen", t:"area", w:"full",
-     h:"@instagram, @tiktok, LinkedIn-Seite, YouTube-Kanal."},
-    {k:"betreuung_heute", q:"Wer betreut die Kanäle heute – intern oder extern?", t:"text", w:"full"},
+    {k:"orgkanaele", q:"Eure Kanäle im Detail", t:"channels", quelle:"marke.plattformen", spec:ORG_FELDER, w:"full",
+     h:"Übernommen aus „Plattformen“ in Abschnitt 05. Fehlt einer, ergänze ihn dort — hier erscheint er dann automatisch.",
+     leer:"Noch keine Plattform gewählt. Trag sie in Abschnitt 05 unter „Plattformen“ ein, dann erscheinen sie hier."},
     {k:"cms", q:"Website-CMS", t:"sel",
      o:["Webflow","WordPress","Shopify","Squarespace","TYPO3","Wix","Eigenentwicklung","weiss ich nicht"]},
-    {k:"shop", q:"Gibt es einen Onlineshop?", t:"yn"},
-    {k:"tracking", q:"Was ist bereits eingerichtet?", t:"chips", w:"full",
+    {k:"tracking_kontakt", q:"Wer kann technisch Änderungen an der Website machen?", t:"text"},
+    {k:"tracking", q:"Was ist bereits eingerichtet?", t:"chips", w:"full", frei:"Weiteres Tool",
      o:["Meta Pixel","Conversions API","GA4","Google Tag Manager","TikTok Pixel","LinkedIn Tag","Server-Side Tracking","nichts davon","weiss ich nicht"]},
     {k:"consent_tool", q:"Consent- / Cookie-Tool", t:"text", ph:"z.B. Cookiebot, Usercentrics"},
-    {k:"tracking_kontakt", q:"Wer kann technisch Änderungen an der Website machen?", t:"text"},
     {k:"crm", q:"CRM – wohin fliessen Leads?", t:"text"},
     {k:"newsletter", q:"E-Mail-Marketing-Tool", t:"text"}
   ]
@@ -664,7 +684,7 @@ const SECTIONS = [
     {k:"rechte", q:"Bestehende Bild-, Musik- oder Personenrechte, die wir kennen müssen", t:"area", w:"full",
      h:"Bereits lizenzierte Musik, Fotoshootings mit begrenzter Nutzungsdauer, Testimonials mit Ablaufdatum."},
     {k:"avv", q:"Braucht es einen Auftragsverarbeitungsvertrag (DSG/DSGVO)?", t:"yn"},
-    {k:"datenschutz_kontakt", q:"Datenschutz-Ansprechperson", t:"text"},
+    {k:"datenschutz_kontakt", q:"Datenschutz-Ansprechperson", t:"text", wenn:{feld:"avv", ist:"Ja"}},
     {k:"interne_hinweise", q:"Sonstiges, das wir beachten müssen", t:"area", w:"full"},
     {k:"offen", q:"Was hätten wir fragen sollen, haben aber nicht?", t:"area", w:"full"}
   ]
@@ -676,8 +696,6 @@ const ACCESS = [
    h:"Das Konto, das Admin-Rechte in Meta / TikTok / Google hat."},
   {k:"ga4_id", q:"GA4 Property-ID", t:"text"},
   {k:"gtm_id", q:"Google Tag Manager Container-ID", t:"text"},
-  {k:"yt_channel", q:"YouTube-Kanal URL", t:"url", ph:"https://"},
-  {k:"li_page", q:"LinkedIn Unternehmensseite", t:"url", ph:"https://"},
   {k:"access_notes", q:"Hinweise zu den Zugängen", t:"area", w:"full",
    h:"Was gibt es noch, was nicht in dieser Liste steht?"}
 ];
@@ -704,9 +722,20 @@ const fmtBytes = b => b<1024?b+" B" : b<1048576?(b/1024).toFixed(0)+" KB" : (b/1
 
 /* Header-Status: Speicher-Zustand + dezenter Ausfüll-Stand.
    Früh deklariert, weil restore() und applyPrefill() ihn setzen. */
+/* Als Funktionsdeklarationen, nicht als const: sie werden schon beim Rendern
+   gebraucht und sind so unabhängig von der Reihenfolge im Skript. */
+
+/* Alle Formularfelder ausser dem Zugangs-Vault (der wird nie zwischengespeichert). */
+function savedFields(){ return $$("#form [name]").filter(i => !i.name.startsWith("vault")); }
+
+/* Hochgeladene Dateien je Kategorie. Steht hier oben, weil updateProgress()
+   schon während des Renderns darauf zugreift. */
+const FILES = {};
+function totalFiles(){ return Object.values(FILES).reduce((n,a)=>n+a.length,0); }
+
 /* Ein Feld zählt nur, wenn es auch sichtbar ist — sonst landen Antworten aus
    zugeklappten Bereichen im Sheet und widersprechen den sichtbaren. */
-const sichtbar = i => { const c = i.closest(".collapse"); return !c || c.classList.contains("open"); };
+function sichtbar(i){ const c = i.closest(".collapse"); return !c || c.classList.contains("open"); }
 
 let fillPct = 0, statusWord = "Bereit";
 function renderStatus(){
@@ -771,7 +800,26 @@ function setChips(box, value){
   if (box._hid) box._hid.dispatchEvent(new Event("change", {bubbles:true}));
 }
 
+/* Felder mit `wenn` und gespiegelte Kanal-Listen werden erst verdrahtet,
+   wenn alle Abschnitte stehen — die Quelle kann weiter oben liegen. */
+const NACHTRAG = [];
+
 function fieldNode(f, prefix){
+  /* Kanal-Matrix, die ihre Kanäle aus einem anderen Feld übernimmt */
+  if (f.t === "channels" && f.quelle){
+    const wrap = el("div","f full");
+    wrap.appendChild(el("label", null, esc(f.q)));
+    if (f.h) wrap.appendChild(el("span","hint", f.h));
+    const angleichen = kanalHost(wrap, prefix, f.spec, f.leer || "Hier erscheint nichts, solange die Quelle leer ist.");
+    NACHTRAG.push(()=>{
+      const src = $('#form [name="' + f.quelle + '"]');
+      if (!src) return;
+      const lauf = ()=> angleichen(String(src.value||"").split(",").map(x=>x.trim()).filter(Boolean));
+      src.addEventListener("change", lauf);
+      lauf();
+    });
+    return wrap;
+  }
   if (f.t === "note"){
     const n = el("div", "f full");
     n.appendChild(el("div","note"+(f.warn?" warn":""),
@@ -863,22 +911,10 @@ function fieldNode(f, prefix){
        Antworten darin richtet. */
     if (f.t === "channels"){
       if (f.h){ wrap.appendChild(el("span","hint", f.h)); wrap._hintDone = true; }
-      const host = el("div","kanaele");
-      const leer = el("p","hint","Noch kein Kanal gewählt — oben auswählen, dann erscheinen die Fragen dazu.");
-      host.appendChild(leer);
-      wrap.appendChild(host);
-      hid.addEventListener("change", ()=>{
-        const gewaehlt = $$('.chip[aria-pressed="true"]', box).map(c=>({
-          v: c.dataset.val,
-          k: c.dataset.val.toLowerCase()
-               .replace(/[äàáâ]/g,"a").replace(/[öòóô]/g,"o").replace(/[üùúû]/g,"u").replace(/ß/g,"ss")
-               .replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"").slice(0,20)
-        }));
-        const da = $$(".kanal", host).map(c=>c.dataset.k);
-        $$(".kanal", host).forEach(c=>{ if(!gewaehlt.some(g=>g.k===c.dataset.k)) c.remove(); });
-        gewaehlt.forEach(g=>{ if(!da.includes(g.k)) host.appendChild(kanalKarte(prefix, g)); });
-        leer.style.display = gewaehlt.length ? "none" : "";
-      });
+      const angleichen = kanalHost(wrap, prefix, f.spec,
+        "Noch kein Kanal gewählt — oben auswählen, dann erscheinen die Fragen dazu.");
+      hid.addEventListener("change", ()=>
+        angleichen($$('.chip[aria-pressed="true"]', box).map(c=>c.dataset.val)));
     }
   }
   else if (f.t === "area"){
@@ -900,38 +936,77 @@ function fieldNode(f, prefix){
   }
   if (f.h && !wrap._hintDone) wrap.appendChild(el("span","hint", f.h));
   if (f.req) wrap.dataset.req = "1";
+  /* Bedingung: dieses Feld erscheint nur bei einer bestimmten Antwort anderswo */
+  if (f.wenn){
+    wrap.classList.add("collapse");
+    const quelle = f.wenn.feld.includes(".") ? f.wenn.feld : prefix + "." + f.wenn.feld;
+    NACHTRAG.push(()=>{
+      const src = $('#form [name="' + quelle + '"]');
+      if (!src) return;
+      const pruefen = ()=>{ wrap.classList.toggle("open", src.value === f.wenn.ist); updateProgress(); };
+      src.addEventListener("change", pruefen);
+      src.addEventListener("input", pruefen);
+      pruefen();
+    });
+  }
   /* Klartext-Bezeichnung fürs Sheet und das Google Doc */
   const feld = $("input,textarea,select", wrap);
   if (feld) feld.dataset.label = f.label || f.q;
   return wrap;
 }
 
-/* ---- eine Karte pro Werbekanal ------------------------------------------- */
-function kanalKarte(prefix, chan){
+/* ---- eine Karte pro Kanal ------------------------------------------------
+   spec = {schalter, immer, ja, nein, ende} — die Blöcke „ja“ und „nein“ hängen
+   an der Antwort im Schalterfeld und erscheinen nur dann. */
+function slugKanal(v){
+  return v.toLowerCase()
+    .replace(/[äàáâ]/g,"a").replace(/[öòóô]/g,"o").replace(/[üùúû]/g,"u").replace(/ß/g,"ss")
+    .replace(/[^a-z0-9]+/g,"_").replace(/^_|_$/g,"").slice(0,20);
+}
+
+function kanalKarte(prefix, chan, spec){
   const card = el("div","kanal"); card.dataset.k = chan.k;
   card.appendChild(el("div","kanal-top",'<span class="mono">' + esc(chan.v) + '</span>'));
 
   const bau = (arr, cls) => {
     const g = el("div", "grid" + (cls ? " collapse " + cls : ""));
-    arr.forEach(ff => g.appendChild(fieldNode(
+    (arr||[]).forEach(ff => g.appendChild(fieldNode(
       {...ff, k: "kanal_" + chan.k + "_" + ff.k, label: chan.v + " — " + ff.q}, prefix)));
     return g;
   };
-  const gImmer = bau(KANAL_FELDER.immer);
-  const gJa    = bau(KANAL_FELDER.ja,   "wenn-ja");
-  const gNein  = bau(KANAL_FELDER.nein, "wenn-nein");
-  const gEnde  = bau(KANAL_FELDER.ende);
+  const gImmer = bau(spec.immer);
+  const gJa    = bau(spec.ja,   "wenn-ja");
+  const gNein  = bau(spec.nein, "wenn-nein");
+  const gEnde  = bau(spec.ende);
   card.append(gImmer, gJa, gNein, gEnde);
 
-  const setup = $('[name="' + prefix + '.kanal_' + chan.k + '_setup"]', gImmer);
+  const schalter = $('[name="' + prefix + '.kanal_' + chan.k + '_' + spec.schalter + '"]', gImmer);
   const richten = ()=>{
-    gJa.classList.toggle("open",   setup.value === "Ja");
-    gNein.classList.toggle("open", setup.value === "Nein");
+    gJa.classList.toggle("open",   schalter.value === "Ja");
+    gNein.classList.toggle("open", schalter.value === "Nein");
     updateProgress();
   };
-  setup.addEventListener("change", richten);
+  schalter.addEventListener("change", richten);
   richten();
   return card;
+}
+
+/* Behälter für die Karten. Gibt eine Funktion zurück, die auf eine Kanalliste
+   hin die Karten angleicht — egal ob die Liste aus eigenen Chips kommt oder
+   aus einem anderen Feld gespiegelt wird. */
+function kanalHost(wrap, prefix, spec, leerText){
+  const host = el("div","kanaele");
+  const leer = el("p","hint", leerText);
+  host.appendChild(leer);
+  wrap.appendChild(host);
+  return (namen)=>{
+    const gew = namen.map(v=>({v, k: slugKanal(v)}));
+    $$(".kanal", host).forEach(c=>{ if(!gew.some(g=>g.k===c.dataset.k)) c.remove(); });
+    const da = $$(".kanal", host).map(c=>c.dataset.k);
+    gew.forEach(g=>{ if(!da.includes(g.k)) host.appendChild(kanalKarte(prefix, g, spec)); });
+    leer.style.display = gew.length ? "none" : "";
+    updateProgress();
+  };
 }
 
 (function renderSections(){
@@ -967,6 +1042,8 @@ function kanalKarte(prefix, chan){
   const ag = $("#accessGrid");
   ACCESS.forEach(f=> ag.appendChild(fieldNode(f, "zugaenge")));
 
+  NACHTRAG.forEach(fn=>fn());
+
   /* Dropzones */
   const dz = $("#dropzones");
   DROPS.forEach(d=>{
@@ -990,7 +1067,6 @@ function kanalKarte(prefix, chan){
 /* =====================================================================
    3 · Dateien
    ===================================================================== */
-const FILES = {};   // {kategorie: [File]}
 function addFiles(cat, fileList, listEl){
   FILES[cat] = FILES[cat] || [];
   [...fileList].forEach(f=>{
@@ -1015,7 +1091,6 @@ function renderList(cat, listEl){
   });
   updateProgress();
 }
-const totalFiles = () => Object.values(FILES).reduce((n,a)=>n+a.length,0);
 
 /* =====================================================================
    4 · Zugangs-Vault (AES-256-GCM, PBKDF2-SHA256)
@@ -1087,7 +1162,6 @@ async function encryptVault(entries, password){
 /* =====================================================================
    5 · Autosave (Zugangsdaten werden bewusst NICHT gespeichert)
    ===================================================================== */
-const savedFields = () => $$("#form [name]").filter(i=>!i.name.startsWith("vault"));
 let saveT;
 function markSaving(){
   clearTimeout(saveT);
