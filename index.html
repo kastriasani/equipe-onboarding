@@ -145,6 +145,12 @@ option{background:#1c1d1c;color:#fff}
 .chip:hover{border-color:var(--line-2);color:var(--ink)}
 .chip[aria-pressed="true"]{border-color:var(--green);background:var(--green-12);color:#fff}
 .chip[aria-pressed="true"]::before{content:"✓";color:var(--green);margin-right:7px;font-size:12px}
+.chip.add{border-style:dashed;color:var(--ink-45)}
+.chip.add:hover{border-color:var(--green);color:var(--green)}
+.chip.eigen .x{margin-left:9px;color:var(--ink-45);font-size:15px;line-height:1}
+.chip.eigen .x:hover{color:var(--red)}
+.chip-input{width:190px;padding:9px 15px;border-radius:var(--pill);font-size:14px;
+  background:rgba(255,255,255,.05);border:1px solid var(--green);box-shadow:0 0 0 3px var(--green-12)}
 
 /* callout */
 .note{
@@ -472,7 +478,8 @@ const SECTIONS = [
      o:["Ganze Schweiz","Deutschschweiz","Romandie","Ticino","DACH","EU","USA","Weltweit"]},
     {k:"kantone", q:"Konkrete Kantone, Städte oder Umkreis", t:"text", w:"full",
      h:"Relevant für die Ausrichtung der Ads."},
-    {k:"sprachen", q:"Sprachen", t:"chips", w:"full",
+    {k:"sprachen", q:"Sprachen", t:"chips", w:"full", frei:"Weitere Sprache",
+     h:"Fehlt eine? Über „+ Weitere Sprache“ selbst eintragen — auch mehrere.",
      o:["Hochdeutsch","Mundart","Französisch","Italienisch","Englisch"]}
   ]
 },
@@ -705,6 +712,25 @@ const STORE_KEY = "eq_onb_" + (CLIENT.token || CLIENT.firma || "default").toLowe
    ===================================================================== */
 const YN = ["Ja","Nein","Weiss ich nicht"];
 
+/* Setzt einen Chip-Wert von aussen (Entwurf, Vertrag). Werte, für die es keinen
+   vorgegebenen Chip gibt, werden als eigener Chip nachgebaut. */
+function setChips(box, value){
+  const vals = String(value).split(",").map(x=>x.trim()).filter(Boolean);
+  $$(".chip", box).forEach(c=>{
+    if (c.classList.contains("add")) return;
+    const treffer = vals.some(v => v.toLowerCase() === c.dataset.val.toLowerCase());
+    if (c.classList.contains("eigen") && !treffer) c.remove();
+    else c.setAttribute("aria-pressed", treffer ? "true" : "false");
+  });
+  if (!box._makeChip) return;
+  const da = $$(".chip", box).filter(c=>!c.classList.contains("add"))
+                             .map(c=>c.dataset.val.toLowerCase());
+  vals.filter(v => !da.includes(v.toLowerCase())).forEach(v=>{
+    const add = $(".chip.add", box), chip = box._makeChip(v, true);
+    add ? add.before(chip) : box.appendChild(chip);
+  });
+}
+
 function fieldNode(f, prefix){
   if (f.t === "note"){
     const n = el("div", "f full");
@@ -728,24 +754,69 @@ function fieldNode(f, prefix){
     const box = el("div","chips");
     const hid = el("input"); hid.type="hidden"; hid.name=name; hid.id=id;
     hid.dataset.kind = single ? "single" : "multi";
-    opts.forEach(o=>{
-      const c = el("button","chip",esc(o));
-      c.type="button"; c.setAttribute("aria-pressed","false"); c.dataset.val=o;
+
+    const sync = ()=>{
+      const on = $$('.chip[aria-pressed="true"]', box).map(x=>x.dataset.val);
+      hid.value = single ? (on[0] || "") : on.join(", ");
+      hid.dispatchEvent(new Event("change", {bubbles:true}));
+    };
+
+    /* eigen = vom Kunden selbst eingetippt: aktiv von Anfang an und wieder entfernbar */
+    function makeChip(val, eigen){
+      const c = el("button", "chip" + (eigen ? " eigen" : ""), esc(val));
+      c.type = "button"; c.dataset.val = val;
+      c.setAttribute("aria-pressed", eigen ? "true" : "false");
+      if (eigen){
+        const x = el("span","x","×");
+        x.title = "Entfernen";
+        x.addEventListener("click", e=>{ e.stopPropagation(); c.remove(); sync(); });
+        c.appendChild(x);
+      }
       c.addEventListener("click", ()=>{
-        if (single){
-          const on = c.getAttribute("aria-pressed")==="true";
-          $$(".chip",box).forEach(x=>x.setAttribute("aria-pressed","false"));
-          c.setAttribute("aria-pressed", on ? "false":"true");
-          hid.value = on ? "" : o;
-        } else {
-          const on = c.getAttribute("aria-pressed")==="true";
-          c.setAttribute("aria-pressed", on ? "false":"true");
-          hid.value = $$('.chip[aria-pressed="true"]',box).map(x=>x.dataset.val).join(", ");
-        }
-        hid.dispatchEvent(new Event("change",{bubbles:true}));
+        const an = c.getAttribute("aria-pressed") === "true";
+        if (single) $$(".chip", box).forEach(x=>x.setAttribute("aria-pressed","false"));
+        c.setAttribute("aria-pressed", an ? "false" : "true");
+        sync();
       });
-      box.appendChild(c);
-    });
+      return c;
+    }
+    const bekannt = v => $$(".chip", box).some(c =>
+      !c.classList.contains("add") && c.dataset.val.toLowerCase() === v.toLowerCase());
+
+    opts.forEach(o => box.appendChild(makeChip(o, false)));
+
+    if (f.frei){
+      const add = el("button","chip add","+ " + f.frei);
+      add.type = "button";
+      add.addEventListener("click", ()=>{
+        if (!add.isConnected) return;            // Eingabe läuft bereits
+        const inp = el("input","chip-input");
+        inp.type = "text"; inp.placeholder = f.frei; inp.setAttribute("aria-label", f.frei);
+        add.replaceWith(inp); inp.focus();
+        const uebernehmen = ()=>{
+          const v = inp.value.trim().replace(/,+$/,"");
+          if (!v) return;
+          if (!bekannt(v)){
+            const chip = makeChip(v, true);
+            if (inp.isConnected) inp.before(chip); else box.appendChild(chip);
+          }
+          inp.value = ""; sync();
+        };
+        /* blur und Klick können sich überschneiden — beide Seiten müssen das aushalten */
+        const schliessen = ()=>{
+          if (!inp.isConnected) return;
+          if (add.isConnected) inp.remove(); else inp.replaceWith(add);
+        };
+        inp.addEventListener("keydown", e=>{
+          if (e.key === "Enter" || e.key === ","){ e.preventDefault(); uebernehmen(); }
+          else if (e.key === "Escape"){ inp.value = ""; schliessen(); }
+        });
+        inp.addEventListener("blur", ()=>{ uebernehmen(); schliessen(); });
+      });
+      box.appendChild(add);
+    }
+
+    box._makeChip = makeChip;
     wrap.appendChild(box); wrap.appendChild(hid);
   }
   else if (f.t === "area"){
@@ -944,10 +1015,7 @@ function restore(){
     const i = $('#form [name="'+k.replace(/"/g,'')+'"]'); if(!i) return;
     i.value = v;
     const box = i.previousElementSibling;
-    if (i.type==="hidden" && box && box.classList.contains("chips")){
-      const vals = v.split(",").map(s=>s.trim());
-      $$(".chip",box).forEach(c=> c.setAttribute("aria-pressed", vals.includes(c.dataset.val)?"true":"false"));
-    }
+    if (i.type==="hidden" && box && box.classList.contains("chips")) setChips(box, v);
   });
   SECTIONS.filter(s=>s.gate).forEach(s=>{
     const g = $('#form [name="'+s.id+"."+s.gate.k+'"]');
@@ -973,10 +1041,7 @@ restore();
     if (!i || i.value) return;
     i.value = v; n++;
     const box = i.previousElementSibling;
-    if (i.type === "hidden" && box && box.classList.contains("chips")){
-      const vals = String(v).split(",").map(x=>x.trim());
-      $$(".chip",box).forEach(c=> c.setAttribute("aria-pressed", vals.includes(c.dataset.val)?"true":"false"));
-    }
+    if (i.type === "hidden" && box && box.classList.contains("chips")) setChips(box, v);
     const f = i.closest(".f");
     if (f && !$(".fromcontract", f))
       f.appendChild(el("span","hint fromcontract","Aus dem Vertrag übernommen — bitte kurz prüfen."));
