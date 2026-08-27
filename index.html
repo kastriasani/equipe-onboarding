@@ -493,20 +493,15 @@ const SECTIONS = [
     {k:"ap_name", q:"Hauptansprechpartner", t:"text", req:true},
     {k:"ap_rolle", q:"Funktion / Rolle", t:"text"},
     {k:"ap_mail", q:"E-Mail", t:"email", req:true},
-    {k:"ap_tel", q:"Telefon / WhatsApp", t:"tel"},
+    {k:"ap_tel", q:"Telefon", t:"tel"},
     {k:"weitere_mails", q:"Weitere E-Mails im Projekt", t:"text", w:"full",
      h:"Mit Komma trennen. Diese Personen erhalten Reportings und Freigabe-Anfragen."},
     {k:"weitere_personen", q:"Weitere Personen & ihre Rolle", t:"area", w:"full",
      h:"z.B. Marketingleitung (Freigabe), HR (Recruiting), Grafik (Assets), IT (Website)."},
     {k:"kanal", q:"Bevorzugter Kommunikationskanal", t:"chips", w:"full", frei:"Anderer Kanal",
-     o:["Mail","WhatsApp","Slack","Teams","Telefon"]},
-    {k:"start_wunsch", q:"Gewünschter Start der Zusammenarbeit", t:"date"},
-    {k:"paket", q:"Gebuchtes Paket", t:"text", ph:"z.B. equipe Package Platin", h:"Steht im Vertrag – falls unklar, leer lassen."},
+     o:["Mail","Slack","Teams","Telefon"]},
     {k:"rechnung_mail", q:"E-Mail für Rechnungen", t:"email"},
-    {k:"mwst", q:"MwSt-Nummer", t:"text", ph:"CHE-123.456.789"},
-    {k:"rechnung_adresse", q:"Rechnungsadresse", t:"area", w:"full"},
-    {k:"rechnung_ref", q:"Referenz / Kostenstelle auf der Rechnung", t:"text", w:"full",
-     h:"Nur falls euer Buchhaltungssystem das braucht."}
+    {k:"rechnung_adresse", q:"Rechnungsadresse", t:"area", w:"full"}
   ]
 },
 {
@@ -628,6 +623,12 @@ const SECTIONS = [
      h:"Ohne CV-Pflicht steigen die Bewerbungszahlen deutlich."},
     {k:"bewerbungsprozess", q:"Wie läuft der Bewerbungsprozess ab?", t:"area", w:"full",
      h:"Wer meldet sich, wie schnell, über welchen Kanal?"},
+    {k:"lp_vorhanden", q:"Gibt es bereits eine eigene Karriere-Landingpage?", t:"yn",
+     h:"Eine Seite, auf der Bewerbungen eingehen — nicht die normale Karriereseite im Menü."},
+    {k:"lp_url", q:"Link zur Landingpage", t:"url", ph:"https://", wenn:{feld:"lp_vorhanden", ist:"Ja"}},
+    {k:"lp_bedarf", q:"Sollen wir eine aufsetzen?", t:"sel", wenn:{feld:"lp_vorhanden", ist:"Nein"},
+     o:["Ja, bitte","Nein, Bewerbungen laufen anders","noch offen"],
+     h:"Ads auf eine eigene Landingpage konvertieren deutlich besser als auf eine Stellenliste."},
     {k:"ats", q:"Wohin gehen die Bewerbungen?", t:"text", h:"ATS, E-Mail-Adresse oder Formular."},
     {k:"hr_kontakt", q:"HR-Ansprechperson", t:"text"},
     {k:"recruiting_sonstiges", q:"Ist sonst noch etwas wissenswert?", t:"area", w:"full"}
