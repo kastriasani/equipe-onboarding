@@ -113,9 +113,21 @@ header{
 .rule{height:1px;background:var(--line);margin:22px 0 26px}
 
 /* ---------- fields ---------- */
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
 .f{display:flex;flex-direction:column;gap:8px}
 .f.full{grid-column:1/-1}
+/* Felder derselben Zeile teilen sich die Zeilenhöhen (Beschriftung / Eingabe /
+   Hinweis). Sonst rutschen die Eingaben auseinander, sobald eine Beschriftung
+   zweizeilig wird. */
+.f input[type="hidden"]{display:none}
+@supports (grid-template-rows: subgrid){
+  .f.sub{display:grid;grid-template-rows:subgrid;grid-row:span 3;gap:8px;align-content:start}
+  .f.sub.collapse{display:none}
+  .f.sub.collapse.open{display:grid}
+}
+@supports not (grid-template-rows: subgrid){
+  .f.sub > label{min-height:2.85em}
+}
 label{font-size:14px;font-weight:500;color:var(--ink-85);letter-spacing:-.005em}
 label .req{color:var(--green);margin-left:3px}
 .hint{font-size:12.5px;color:var(--ink-45);line-height:1.45}
@@ -831,7 +843,9 @@ function fieldNode(f, prefix){
   }
 
   const name = prefix + "." + f.k;
-  const wrap = el("div", "f" + (f.w === "full" || f.t === "area" || f.t === "chips" ? " full" : ""));
+  const wrap = el("div", "f"
+    + (f.w === "full" || f.t === "area" || f.t === "chips" ? " full" : "")
+    + (f.t === "channels" ? "" : " sub"));
   const id = "fld_" + name.replace(/\./g,"_");
   wrap.appendChild(el("label", null, esc(f.q) + (f.req ? ' <span class="req">*</span>' : "")))
       .setAttribute("for", id);
