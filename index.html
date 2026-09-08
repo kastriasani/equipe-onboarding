@@ -175,14 +175,6 @@ option{background:#1c1d1c;color:#fff}
 .note b{color:var(--ink);font-weight:500}
 
 /* switch */
-.switch{display:flex;align-items:center;gap:14px;border:1px solid var(--line);background:var(--card);border-radius:var(--r-16);padding:16px 18px;cursor:pointer}
-.switch:hover{background:var(--card-h)}
-.track{width:44px;height:25px;border-radius:var(--pill);background:rgba(255,255,255,.12);position:relative;flex:none;transition:.2s}
-.knob{position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#fff;transition:.2s}
-.switch[aria-checked="true"] .track{background:var(--green)}
-.switch[aria-checked="true"] .knob{left:22px}
-.switch .txt{font-size:14.5px;color:var(--ink-85)}
-.switch .txt small{display:block;color:var(--ink-45);font-size:12.5px;margin-top:2px}
 .collapse{display:none;margin-top:22px}
 .collapse.open{display:block;animation:fade .3s ease}
 .collapse.grid{margin-top:0}
@@ -196,15 +188,6 @@ option{background:#1c1d1c;color:#fff}
 .kanal .grid{gap:14px}
 .kanal .grid + .grid:not(.collapse){margin-top:14px}
 @keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
-
-/* vault rows */
-.vrow{border:1px solid var(--line);background:var(--card);border-radius:var(--r-16);padding:16px;margin-bottom:12px}
-.vrow .grid{gap:12px}
-.vrow-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.vrow-top .mono{color:var(--ink-45)}
-.mini{background:none;border:1px solid var(--line);color:var(--ink-45);border-radius:var(--pill);padding:6px 12px;font:inherit;font-size:12.5px;cursor:pointer}
-.mini:hover{border-color:var(--line-2);color:var(--ink)}
-.mini.danger:hover{border-color:var(--red);color:var(--red)}
 
 /* dropzone */
 .drop{
@@ -296,7 +279,6 @@ footer{border-top:1px solid var(--line);padding:30px 0 46px;color:var(--ink-30);
     <div class="facts">
       <span class="fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>ca. 15–20 Minuten</span>
       <span class="fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>speichert automatisch</span>
-      <span class="fact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Zugänge verschlüsselt</span>
     </div>
   </section>
 
@@ -315,55 +297,9 @@ footer{border-top:1px solid var(--line);padding:30px 0 46px;color:var(--ink-30);
   <form id="form" novalidate>
     <div id="sections"></div>
 
-    <!-- ============ ZUGÄNGE / VAULT ============ -->
-    <section class="sec" id="sec-zugaenge">
-      <div class="sec-head"><span class="sec-num mono">10</span><h2>Zugänge &amp; Logins</h2></div>
-      <p class="sec-intro">Wir brauchen Zugriff auf Kanäle und Werbekonten. Der sichere Weg ist immer eine <b style="color:var(--ink-85);font-weight:500">Partner-Einladung</b> — dann behältst du die Kontrolle und kannst uns jederzeit wieder entfernen. Passwörter nur, wenn eine Einladung technisch nicht geht.</p>
-      <div class="rule"></div>
-
-      <div class="note" style="margin-bottom:18px">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg>
-        <div><b>So läuft die Einladung:</b> Du lädst <span style="color:var(--ink-85)">partner@equipe.one</span> als Admin/Partner in Meta Business Suite, TikTok Business Center und Google Ads ein. Wir schicken dir nach dem Absenden eine Schritt-für-Schritt-Anleitung mit unseren IDs.</div>
-      </div>
-
-      <div class="grid" id="accessGrid"></div>
-
-      <div style="margin-top:26px">
-        <div class="switch" id="vaultSwitch" role="switch" aria-checked="false" tabindex="0">
-          <span class="track"><span class="knob"></span></span>
-          <span class="txt">Ich hinterlege zusätzlich Zugangsdaten (Passwörter)
-            <small>Wird im Browser Ende-zu-Ende verschlüsselt — AES-256-GCM. Ohne dein Passwort kann niemand mitlesen, auch wir nicht.</small>
-          </span>
-        </div>
-
-        <div class="collapse" id="vaultBox">
-          <div class="note warn" style="margin-bottom:18px">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
-            <div><b>Bitte niemals hier eintragen:</b> Kreditkarten- oder Bankdaten, E-Banking-Zugänge, private Passwörter. Zahlungsmittel hinterlegst du ausschliesslich direkt im Meta / TikTok Business Manager.</div>
-          </div>
-
-          <div class="grid" style="margin-bottom:22px">
-            <div class="f">
-              <label for="vaultPw">Verschlüsselungs-Passwort <span class="req">*</span></label>
-              <input type="password" id="vaultPw" autocomplete="new-password" placeholder="min. 10 Zeichen">
-              <span class="hint">Frei wählbar. <b style="color:var(--ink-85);font-weight:500">Teile es uns separat mit</b> — per Telefon oder WhatsApp, nie in derselben E-Mail.</span>
-            </div>
-            <div class="f">
-              <label for="vaultPw2">Passwort wiederholen <span class="req">*</span></label>
-              <input type="password" id="vaultPw2" autocomplete="new-password" placeholder="nochmals eingeben">
-              <span class="hint" id="pwState">&nbsp;</span>
-            </div>
-          </div>
-
-          <div id="vaultRows"></div>
-          <button type="button" class="mini" id="addVault">+ Weiterer Zugang</button>
-        </div>
-      </div>
-    </section>
-
     <!-- ============ UPLOADS ============ -->
     <section class="sec" id="sec-uploads">
-      <div class="sec-head"><span class="sec-num mono">11</span><h2>Unterlagen &amp; Material</h2></div>
+      <div class="sec-head"><span class="sec-num mono">10</span><h2>Unterlagen &amp; Material</h2></div>
       <p class="sec-intro">Alles, was uns Kontext gibt: CI/CD, Logos, Brand Guide, Produktbilder, bestehendes Footage, Broschüren, frühere Auswertungen. Landet direkt in unserem Projekt-Ordner auf Google Drive.</p>
       <div class="rule"></div>
       <div id="dropzones"></div>
@@ -374,7 +310,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 46px;color:var(--ink-30);
       <div class="rule"></div>
       <label class="consent">
         <input type="checkbox" id="consent">
-        <span>Die Angaben sind nach meinem besten Wissen korrekt. equipe darf sie zur Umsetzung des Projekts verwenden und intern im Team teilen. Zugangsdaten werden verschlüsselt übermittelt.</span>
+        <span>Die Angaben sind nach meinem besten Wissen korrekt. equipe darf sie zur Umsetzung des Projekts verwenden und intern im Team teilen.</span>
       </label>
       <button type="submit" class="cta" id="submitBtn">
         Onboarding absenden
@@ -437,7 +373,7 @@ const KANAL_FELDER = {
     {k:"konto_id", q:"Werbekonto- oder Business-ID", t:"text", h:"Falls zur Hand — sonst später."},
     {k:"zugriff", q:"Wer hat heute Zugriff?", t:"text", h:"Intern oder eine andere Agentur?"},
     {k:"zugang_via", q:"Wie bekommen wir Zugriff?", t:"sel", w:"full",
-     o:["Partner-Einladung (empfohlen)","Zugangsdaten im verschlüsselten Bereich weiter unten","noch offen"]}
+     o:["Partner-Einladung (empfohlen)","Zugangsdaten schicken wir separat","noch offen"]}
   ],
   nein: [
     {k:"einrichtung", q:"Wer richtet das Konto ein?", t:"sel", o:["equipe","Wir selbst","Gemeinsam"]},
@@ -461,7 +397,7 @@ const ORG_FELDER = {
     {k:"handle", q:"Handle oder Link", t:"text", ph:"@name oder URL"},
     {k:"betreuung", q:"Wer betreut ihn heute?", t:"text", h:"Intern, eine Agentur oder niemand."},
     {k:"zugang_via", q:"Wie bekommen wir Zugriff?", t:"sel", w:"full",
-     o:["Partner-Einladung (empfohlen)","Zugangsdaten im verschlüsselten Bereich weiter unten","noch offen"]}
+     o:["Partner-Einladung (empfohlen)","Zugangsdaten schicken wir separat","noch offen"]}
   ],
   nein: [
     {k:"anlegen", q:"Wer legt den Account an?", t:"sel", o:["equipe","Wir selbst","Gemeinsam"]},
@@ -696,18 +632,6 @@ const SECTIONS = [
   ]
 }];
 
-/* Zugänge ohne Passwort — unverschlüsselt, weil unkritisch */
-const ACCESS = [
-  {k:"invite_mail", q:"E-Mail-Adresse, über die du uns einladen kannst", t:"email", w:"full",
-   h:"Das Konto, das Admin-Rechte in Meta / TikTok / Google hat."},
-  {k:"ga4_id", q:"GA4 Property-ID", t:"text"},
-  {k:"gtm_id", q:"Google Tag Manager Container-ID", t:"text"},
-  {k:"access_notes", q:"Hinweise zu den Zugängen", t:"area", w:"full",
-   h:"Was gibt es noch, was nicht in dieser Liste steht?"}
-];
-
-const VAULT_PLATFORMS = ["Instagram","TikTok","Facebook","YouTube","LinkedIn","Website / CMS","Shop-Backend","Google","Pinterest","Sonstiges"];
-
 const DROPS = [
   {k:"ci",         t:"CI/CD, Brand Guide & Logos",           s:"PDF, AI, EPS, SVG, PNG"},
   {k:"bilder",     t:"Bild- & Videomaterial",                s:"Produktbilder, Footage, Fotoshootings"},
@@ -731,8 +655,8 @@ const fmtBytes = b => b<1024?b+" B" : b<1048576?(b/1024).toFixed(0)+" KB" : (b/1
 /* Als Funktionsdeklarationen, nicht als const: sie werden schon beim Rendern
    gebraucht und sind so unabhängig von der Reihenfolge im Skript. */
 
-/* Alle Formularfelder ausser dem Zugangs-Vault (der wird nie zwischengespeichert). */
-function savedFields(){ return $$("#form [name]").filter(i => !i.name.startsWith("vault")); }
+/* Alle Formularfelder. */
+function savedFields(){ return $$("#form [name]"); }
 
 /* Hochgeladene Dateien je Kategorie. Steht hier oben, weil updateProgress()
    schon während des Renderns darauf zugreift. */
@@ -1046,10 +970,6 @@ function kanalHost(wrap, prefix, spec, leerText){
     host.appendChild(sec);
   });
 
-  /* Zugänge (unverschlüsselt) */
-  const ag = $("#accessGrid");
-  ACCESS.forEach(f=> ag.appendChild(fieldNode(f, "zugaenge")));
-
   NACHTRAG.forEach(fn=>fn());
 
   /* Dropzones */
@@ -1102,74 +1022,7 @@ function renderList(cat, listEl){
 }
 
 /* =====================================================================
-   4 · Zugangs-Vault (AES-256-GCM, PBKDF2-SHA256)
-   ===================================================================== */
-const vaultSwitch = $("#vaultSwitch"), vaultBox = $("#vaultBox");
-function toggleVault(force){
-  const on = force!=null ? force : vaultSwitch.getAttribute("aria-checked")!=="true";
-  vaultSwitch.setAttribute("aria-checked", on ? "true":"false");
-  vaultBox.classList.toggle("open", on);
-  if (on && !$$(".vrow").length) addVaultRow();
-}
-vaultSwitch.addEventListener("click", ()=>toggleVault());
-vaultSwitch.addEventListener("keydown", e=>{ if(e.key===" "||e.key==="Enter"){e.preventDefault(); toggleVault();} });
-
-function addVaultRow(){
-  const rows = $("#vaultRows");
-  const n = $$(".vrow").length + 1;
-  const row = el("div","vrow");
-  row.innerHTML =
-    '<div class="vrow-top"><span class="mono">Zugang '+n+'</span>'+
-    '<button type="button" class="mini danger">Entfernen</button></div>'+
-    '<div class="grid">'+
-      '<div class="f"><label>Plattform</label><select data-v="platform">'+
-        VAULT_PLATFORMS.map(p=>'<option value="'+esc(p)+'">'+esc(p)+'</option>').join("")+
-      '</select></div>'+
-      '<div class="f"><label>Benutzername / E-Mail</label><input type="text" data-v="user" autocomplete="off"></div>'+
-      '<div class="f"><label>Passwort</label><input type="text" data-v="pass" autocomplete="off" spellcheck="false"></div>'+
-      '<div class="f"><label>2FA / Hinweis</label><input type="text" data-v="note" autocomplete="off" placeholder="z.B. 2FA auf Handy von Marcel"></div>'+
-    '</div>';
-  $(".mini",row).addEventListener("click", ()=>{ row.remove(); renumberVault(); });
-  rows.appendChild(row);
-}
-function renumberVault(){ $$(".vrow").forEach((r,i)=> $(".mono",r).textContent = "Zugang "+(i+1)); }
-$("#addVault").addEventListener("click", addVaultRow);
-
-$("#vaultPw2").addEventListener("input", ()=>{
-  const a=$("#vaultPw").value, b=$("#vaultPw2").value, s=$("#pwState");
-  if(!b){ s.textContent=" "; s.style.color=""; return; }
-  const ok = a===b && a.length>=10;
-  s.textContent = a!==b ? "Passwörter stimmen nicht überein" : (a.length<10 ? "Mindestens 10 Zeichen" : "Passwörter stimmen überein");
-  s.style.color = ok ? "var(--green)" : "var(--red)";
-});
-
-function collectVault(){
-  return $$(".vrow").map(r=>({
-    platform: $('[data-v="platform"]',r).value,
-    user:     $('[data-v="user"]',r).value.trim(),
-    pass:     $('[data-v="pass"]',r).value,
-    note:     $('[data-v="note"]',r).value.trim()
-  })).filter(x=>x.user||x.pass);
-}
-const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
-
-async function encryptVault(entries, password){
-  if (!(window.crypto && crypto.subtle))
-    throw new Error("Verschlüsselung nicht verfügbar – die Seite muss über HTTPS laufen.");
-  const enc  = new TextEncoder();
-  const salt = crypto.getRandomValues(new Uint8Array(16));
-  const iv   = crypto.getRandomValues(new Uint8Array(12));
-  const iter = 310000;
-  const km   = await crypto.subtle.importKey("raw", enc.encode(password), "PBKDF2", false, ["deriveKey"]);
-  const key  = await crypto.subtle.deriveKey(
-    {name:"PBKDF2", salt, iterations:iter, hash:"SHA-256"}, km,
-    {name:"AES-GCM", length:256}, false, ["encrypt"]);
-  const ct = await crypto.subtle.encrypt({name:"AES-GCM", iv}, key, enc.encode(JSON.stringify(entries)));
-  return {v:1, alg:"AES-256-GCM", kdf:"PBKDF2-SHA256", iter, salt:b64(salt), iv:b64(iv), ct:b64(ct), count:entries.length};
-}
-
-/* =====================================================================
-   5 · Autosave (Zugangsdaten werden bewusst NICHT gespeichert)
+   4 · Autosave
    ===================================================================== */
 let saveT;
 function markSaving(){
@@ -1235,11 +1088,11 @@ restore();
 if (CLIENT.firma){ const f=$('#form [name="unternehmen.firma"]'); if(f && !f.value) f.value = CLIENT.firma; }
 if (CLIENT.name) { const f=$('#form [name="unternehmen.ap_name"]'); if(f && !f.value) f.value = CLIENT.name; }
 updateProgress();
-$("#form").addEventListener("input", e=>{ if(!e.target.name || !e.target.name.startsWith("vault")) markSaving(); updateProgress(); });
-$("#form").addEventListener("change", e=>{ if(!e.target.name || !e.target.name.startsWith("vault")) markSaving(); updateProgress(); });
+$("#form").addEventListener("input", ()=>{ markSaving(); updateProgress(); });
+$("#form").addEventListener("change", ()=>{ markSaving(); updateProgress(); });
 
 /* =====================================================================
-   6 · Fortschritt
+   5 · Fortschritt
    ===================================================================== */
 function updateProgress(){
   const visible = savedFields().filter(sichtbar);
@@ -1264,7 +1117,7 @@ if (!CSS_SCROLL){
 updateProgress();
 
 /* =====================================================================
-   7 · Absenden
+   6 · Absenden
    ===================================================================== */
 function collectAnswers(){
   const out = {};
@@ -1278,7 +1131,6 @@ function collectAnswers(){
 function labelFor(sec,key){
   const s = SECTIONS.find(x=>x.id===sec);
   if (s){ if(s.gate&&s.gate.k===key) return s.gate.q; const f=s.fields.find(x=>x.k===key); if(f) return f.q; }
-  if (sec==="zugaenge"){ const f=ACCESS.find(x=>x.k===key); if(f) return f.q; }
   return key;
 }
 function validate(){
@@ -1341,17 +1193,9 @@ $("#form").addEventListener("submit", async e=>{
   if (bad){ fail("Bitte fülle die markierten Pflichtfelder aus."); bad.scrollIntoView({block:"center"}); return; }
   if (!$("#consent").checked){ fail("Bitte bestätige die Einverständniserklärung."); return; }
 
-  const vaultOn = vaultSwitch.getAttribute("aria-checked")==="true";
-  const entries = vaultOn ? collectVault() : [];
-  const pw = $("#vaultPw").value;
-  if (entries.length){
-    if (pw.length < 10){ fail("Bitte setze ein Verschlüsselungs-Passwort mit mindestens 10 Zeichen."); $("#vaultPw").focus(); return; }
-    if (pw !== $("#vaultPw2").value){ fail("Die beiden Passwörter stimmen nicht überein."); $("#vaultPw2").focus(); return; }
-  }
-
   $("#submitBtn").disabled = true;
   const files = Object.entries(FILES).flatMap(([cat,arr])=>arr.map(f=>({cat,f})));
-  const steps = [{id:"enc",label:"Zugänge verschlüsseln"},{id:"ans",label:"Antworten übermitteln"}];
+  const steps = [{id:"ans",label:"Antworten übermitteln"}];
   files.forEach((x,i)=> steps.push({id:"f"+i, label:"Datei: "+x.f.name}));
   showSteps(steps);
 
@@ -1370,12 +1214,6 @@ $("#form").addEventListener("submit", async e=>{
   };
 
   try{
-    if (entries.length){
-      setStep("enc","run","Zugänge verschlüsseln…");
-      payload.vault = await encryptVault(entries, pw);
-    }
-    setStep("enc","done", entries.length ? entries.length+" Zugänge verschlüsselt" : "Keine Zugangsdaten");
-
     setStep("ans","run","Antworten übermitteln…");
     const res = await post(payload);
     setStep("ans","done","Antworten übermittelt");
@@ -1396,7 +1234,6 @@ $("#form").addEventListener("submit", async e=>{
       '<h3>Danke'+(CLIENT.name?", "+esc(CLIENT.name):"")+'!</h3>'+
       '<p>Alles ist bei uns angekommen'+(res.test?' <b>(Testmodus – nichts versendet)</b>':'')+
       '. Wir sichten deine Angaben und melden uns innerhalb von zwei Arbeitstagen mit dem Kickoff-Termin.</p>'+
-      (entries.length ? '<div class="note" style="margin-top:22px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><div><b>Ein letzter Schritt:</b> Schick uns das Verschlüsselungs-Passwort separat – per WhatsApp oder Telefon. Ohne dieses Passwort können wir die Zugänge nicht öffnen.</div></div>' : '')+
       '<p style="margin-top:22px"><a href="https://www.equipe.one">Zurück zu equipe.one</a></p>';
   }catch(err){
     ovbox.innerHTML =
