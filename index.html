@@ -367,13 +367,6 @@ footer{border-top:1px solid var(--line);padding:30px 0 46px;color:var(--ink-30);
       <p class="sec-intro">Alles, was uns Kontext gibt: CI/CD, Logos, Brand Guide, Produktbilder, bestehendes Footage, Broschüren, frühere Auswertungen. Landet direkt in unserem Projekt-Ordner auf Google Drive.</p>
       <div class="rule"></div>
       <div id="dropzones"></div>
-      <div class="grid" style="margin-top:22px">
-        <div class="f full">
-          <label for="bigLink">Link zu grossen Dateien</label>
-          <input type="url" id="bigLink" name="uploads.link" placeholder="https://drive.google.com/… oder WeTransfer / Dropbox">
-          <span class="hint">Für Footage &amp; alles über 20 MB pro Datei: lieber verlinken als hochladen.</span>
-        </div>
-      </div>
     </section>
 
     <!-- ============ SUBMIT ============ -->
@@ -1087,7 +1080,8 @@ function addFiles(cat, fileList, listEl){
   [...fileList].forEach(f=>{
     if (f.size > CONFIG.MAX_FILE_MB*1048576){
       alert('„'+f.name+'“ ist '+fmtBytes(f.size)+' gross – Maximum sind '+CONFIG.MAX_FILE_MB+
-            ' MB pro Datei.\n\nBitte nutze stattdessen das Feld „Link zu grossen Dateien“ weiter unten.');
+            ' MB pro Datei.\n\nGrosse Dateien und Footage bitte verlinken: Abschnitt 05, '+
+            '„Welches Material existiert schon – und wo liegt es?“');
       return;
     }
     if (FILES[cat].some(x=>x.name===f.name && x.size===f.size)) return;
@@ -1285,7 +1279,6 @@ function labelFor(sec,key){
   const s = SECTIONS.find(x=>x.id===sec);
   if (s){ if(s.gate&&s.gate.k===key) return s.gate.q; const f=s.fields.find(x=>x.k===key); if(f) return f.q; }
   if (sec==="zugaenge"){ const f=ACCESS.find(x=>x.k===key); if(f) return f.q; }
-  if (sec==="uploads") return "Link zu grossen Dateien";
   return key;
 }
 function validate(){
